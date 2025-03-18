@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { registerOperation, registerSchema, registry } from './zod-openapi';
+import { registerSchema, registry } from './zod-openapi';
 import { appointmentCreateSchema, appointmentCompleteSchema } from '../common/adapters/schemas/appointment';
 import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 
@@ -41,31 +41,55 @@ const ErrorResponseSchema = registerSchema(
   'Schema for error response'
 );
 
-// Register API operations
-registerOperation({
+// Register API operations directly using registry.registerPath
+registry.registerPath({
   method: 'post',
   path: '/appointments',
   summary: 'Create a new appointment',
   description: 'Endpoint to create a new appointment for an insured person',
   tags: ['Appointments'],
-  requestSchema: AppointmentCreateSchema,
-  responseSchema: AppointmentResponseSchema,
-  responseDescription: 'The created appointment',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: AppointmentCreateSchema
+        }
+      }
+    }
+  },
+  responses: {
+    200: {
+      description: 'The created appointment',
+      content: {
+        'application/json': {
+          schema: AppointmentResponseSchema,
+        },
+      },
+    },
+  },
 });
 
-registerOperation({
+registry.registerPath({
   method: 'get',
   path: '/insureds/{insuredId}/appointments',
   summary: 'Get appointments by insured ID',
   description: 'Retrieve all appointments for a specific insured person',
   tags: ['Appointments'],
-  pathParams: z.object({
-    insuredId: z.string({
-      description: 'The ID of the insured person',
+  request: {
+    params: z.object({
+      insuredId: z.string(),
     }),
-  }),
-  responseSchema: AppointmentListResponseSchema,
-  responseDescription: 'List of appointments for the insured person',
+  },
+  responses: {
+    200: {
+      description: 'List of appointments for the insured person',
+      content: {
+        'application/json': {
+          schema: AppointmentListResponseSchema,
+        },
+      },
+    },
+  },
 });
 
 // Generate the OpenAPI document
@@ -77,12 +101,8 @@ export const openApiDocument = new OpenApiGeneratorV3(registry.definitions).gene
   },
   servers: [
     {
-      url: 'http://localhost:3000',
+      url: ' https://bbpveee6vb.execute-api.us-east-1.amazonaws.com/dev',
       description: 'Local development server',
-    },
-    {
-      url: 'https://api.example.com',
-      description: 'Production server',
     },
   ],
   openapi: '3.0.0',

@@ -9,15 +9,13 @@ import { AppointmentCountryMemoryRepository } from "./infraestructure/repositori
 // Aquí se usa el patrón de diseño `Inyección de Dependencias` 
 // para proveer los servicios necesarios para el controlador de citas en Chile
 
+console.log("env", process.env);
 const config = new AppointmentCLConfigEnv();
 const appointmentProducer = new AppointmentProducer(
   new EventBridgeClient({}),
   config.eventBridge
 );
-const appointmentCountryRepository = process.env.IS_LOCAL ? new AppointmentCountryMemoryRepository() :
-  new AppointmentCountryRDSRepository(
-    config.rdsDatabase
-  );
+const appointmentCountryRepository = new AppointmentCountryMemoryRepository();
 export const appointmentService = new AppointmentCLService(
   appointmentCountryRepository,
   appointmentProducer

@@ -22,7 +22,9 @@ describe("appointment-pe.handler", () => {
         const mockEvent = {
             Records: [
                 {
-                    body: JSON.stringify(item),
+                    body: JSON.stringify({
+                        Message: JSON.stringify(item),
+                    }),
                 },
             ],
         };
@@ -46,7 +48,9 @@ describe("appointment-pe.handler", () => {
         ];
         const multipleRecordsEvent = {
             Records: items.map((item) => ({
-                body: JSON.stringify(item),
+                body: JSON.stringify({
+                    Message: JSON.stringify(item),
+                }),
             })),
         };
 

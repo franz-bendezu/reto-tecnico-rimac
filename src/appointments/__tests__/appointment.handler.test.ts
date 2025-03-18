@@ -20,7 +20,9 @@ describe("appointment.handler", () => {
         const sqsEvent: SQSEvent = {
             Records: [
                 {
-                    body: JSON.stringify({ appointmentId: "123" }),
+                    body: JSON.stringify({ 
+                        detail: { appointmentId: "123" }
+                     }),
                     messageId: "",
                     receiptHandle: "",
                     attributes: {

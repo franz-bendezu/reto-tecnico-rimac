@@ -21,7 +21,9 @@ describe("appointment-cl.handler", () => {
         ];
         const event = {
             Records: items.map((item) => ({
-                body: JSON.stringify(item),
+                body: JSON.stringify({
+                    Message: JSON.stringify(item),
+                }),
             })),
         };
 

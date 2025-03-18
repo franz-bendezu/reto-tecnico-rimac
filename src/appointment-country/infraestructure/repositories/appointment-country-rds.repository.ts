@@ -6,7 +6,11 @@ import { IAppointmentCountryRepository } from "./appointment-country.repository.
 import { IDatabaseConfig } from "../config/appointment-country.config.interface";
 import { INSERT_APPOINTMENT_QUERY } from "./querys/appointment-country.query";
 
-// RDS settings
+/**
+ * Implementación del repositorio de citas para el país, 
+ * se usa el patrón de diseño `Repositorio` para abstraer el acceso a la base de datos.
+ * Permite la conexión y operaciones con la base de datos RDS.
+ */
 export class AppointmentCountryRDSRepository
   implements IAppointmentCountryRepository {
   token?: string;

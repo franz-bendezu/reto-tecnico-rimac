@@ -23,7 +23,7 @@ export const handler = async (
       body: JSON.stringify(openApiDocument),
     };
   }
-  
+
   // 404 for all other paths
   return {
     statusCode: 404,

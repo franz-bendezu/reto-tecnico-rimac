@@ -1,0 +1,168 @@
+{
+  "info": {
+    "title": "Appointment Service API",
+    "version": "1.0.0",
+    "description": "API for managing appointments"
+  },
+  "servers": [
+    {
+      "url": " https://bbpveee6vb.execute-api.us-east-1.amazonaws.com/dev",
+      "description": "Local development server"
+    }
+  ],
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      "AppointmentCreate": {
+        "type": "object",
+        "properties": {
+          "insuredId": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 5
+          },
+          "scheduleId": {
+            "type": "number"
+          },
+          "countryISO": {
+            "type": "string",
+            "enum": [
+              "PE",
+              "CL"
+            ]
+          }
+        },
+        "required": [
+          "insuredId",
+          "scheduleId",
+          "countryISO"
+        ],
+        "description": "Schema for creating a new appointment"
+      },
+      "AppointmentComplete": {
+        "type": "object",
+        "properties": {
+          "insuredId": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 5
+          },
+          "scheduleId": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "insuredId",
+          "scheduleId"
+        ],
+        "description": "Schema for completing an appointment"
+      },
+      "AppointmentResponse": {
+        "type": "object",
+        "properties": {
+          "insuredId": {
+            "type": "string"
+          },
+          "scheduleId": {
+            "type": "number"
+          },
+          "countryISO": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "insuredId",
+          "scheduleId",
+          "countryISO"
+        ],
+        "description": "Schema for appointment response"
+      },
+      "AppointmentListResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AppointmentResponse"
+        },
+        "description": "Schema for appointment list response"
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "description": "Schema for error response"
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/appointments": {
+      "post": {
+        "summary": "Create a new appointment",
+        "description": "Endpoint to create a new appointment for an insured person",
+        "tags": [
+          "Appointments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppointmentCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The created appointment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppointmentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/insureds/{insuredId}/appointments": {
+      "get": {
+        "summary": "Get appointments by insured ID",
+        "description": "Retrieve all appointments for a specific insured person",
+        "tags": [
+          "Appointments"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "insuredId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of appointments for the insured person",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppointmentListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

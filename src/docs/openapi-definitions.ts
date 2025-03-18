@@ -140,7 +140,7 @@ export const openApiDocument = new OpenApiGeneratorV3(registry.definitions).gene
   },
   servers: [
     {
-      url: ' https://bbpveee6vb.execute-api.us-east-1.amazonaws.com/dev',
+      url: ' https://xxxxx.us-east-1.amazonaws.com/dev',
       description: 'Servidor de desarrollo local',
     },
   ],

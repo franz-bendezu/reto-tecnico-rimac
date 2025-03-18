@@ -97,7 +97,6 @@ describe("AppointmentDynamoDBRepository", () => {
 
         docClient.send.mockImplementationOnce(
             (): ScanCommandOutput => ({
-                Items: mockItems,
                 $metadata: {
                     requestId: "123",
                 },

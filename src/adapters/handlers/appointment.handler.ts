@@ -4,7 +4,6 @@ import type {
   SQSEvent,
   SQSHandler,
 } from "aws-lambda";
-import { insuredIdSchema } from "../schemas/insured";
 import { appointmentController } from "./appointment.handler.provider";
 
 export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (

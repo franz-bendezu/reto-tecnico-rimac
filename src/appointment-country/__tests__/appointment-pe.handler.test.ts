@@ -8,23 +8,34 @@ jest.mock("../handler-pe.provider");
 describe("appointment-pe.handler", () => {
     let mockCreateAppointment: jest.SpyInstance;
 
-    const mockEvent = {
-        Records: [
-            {
-                body: JSON.stringify({ id: 1, name: "Test Appointment" }),
-            },
-        ],
-    };
-
     beforeEach(() => {
         jest.clearAllMocks();
         mockCreateAppointment = jest.spyOn(appointmentCountryController, "createAppointment");
     });
 
     it("should call createAppointment with the correct appointment data", async () => {
+        const item: IAppointmentCreate = {
+            insuredId: "123",
+            scheduleId: 1,
+            countryISO: "PE"
+        };
+        const mockEvent = {
+            Records: [
+                {
+                    body: JSON.stringify(item),
+                },
+            ],
+        };
+
         await handler(mockEvent as any, {} as any, {} as any);
 
-        expect(mockCreateAppointment).toHaveBeenCalledWith({ id: 1, name: "Test Appointment" });
+        expect(mockCreateAppointment).toHaveBeenCalledWith(
+            expect.objectContaining({
+                insuredId: "123",
+                scheduleId: 1,
+                countryISO: "PE",
+            })
+        );
         expect(mockCreateAppointment).toHaveBeenCalledTimes(1);
     });
 

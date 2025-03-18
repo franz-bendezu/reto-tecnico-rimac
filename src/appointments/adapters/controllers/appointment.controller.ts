@@ -12,7 +12,7 @@ export class AppointmentController {
             await this.appointmentService.createAppointment(validData);
             return {
                 statusCode: 200,
-                body: { message: "Appointment created" },
+                body: { message: "El agendamiento está en proceso" },
             };
         } catch (error) {
             return this.handleError(error);

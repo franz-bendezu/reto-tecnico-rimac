@@ -67,22 +67,59 @@
         "type": "object",
         "properties": {
           "insuredId": {
-            "type": "string"
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 5,
+            "pattern": "^\\d{5}$",
+            "description": "Código de asegurado"
           },
           "scheduleId": {
-            "type": "number"
+            "type": "number",
+            "minimum": 0
           },
           "countryISO": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "PE",
+              "CL"
+            ]
           },
           "createdAt": {
             "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "lastStatus": {
+            "type": "string"
+          },
+          "statuses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status",
+                "createdAt"
+              ]
+            }
           }
         },
         "required": [
           "insuredId",
           "scheduleId",
-          "countryISO"
+          "countryISO",
+          "createdAt",
+          "updatedAt",
+          "lastStatus",
+          "statuses"
         ],
         "description": "Esquema para respuesta de cita"
       },
@@ -135,11 +172,31 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Datos inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/ensureds/{ensuredId}/appointments": {
+    "/insureds/{insuredId}/appointments": {
       "get": {
         "summary": "Obtener citas por ID del asegurado",
         "description": "Recuperar todas las citas para una persona asegurada específica",
@@ -149,9 +206,14 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 5,
+              "pattern": "^\\d{5}$",
+              "description": "Código de asegurado"
             },
             "required": true,
+            "description": "Código de asegurado",
             "name": "insuredId",
             "in": "path"
           }
@@ -163,6 +225,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AppointmentListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }

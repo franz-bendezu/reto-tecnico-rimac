@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { openApiDocument } from './openapi-definitions';
-import './script';
+import { openApiDocument } from '../openapi-definitions';
+import '../script';
 
 jest.mock('fs', () => ({
     writeFileSync: jest.fn(),

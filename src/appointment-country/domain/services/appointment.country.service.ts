@@ -3,6 +3,7 @@ import { IAppointmentCountryRepository } from "../../infraestructure/repositorie
 import { IAppointmentCreate } from "../../../common/domain/interfaces/appointment-create";
 import { AppointmentStatusType } from "../../../common/domain/models/appointment-status";
 import { IAppointmentCountryService } from "./appointment-country.service.interface";
+import { BaseAppointment } from "../../../common/domain/models/base-appointment.model";
 
 /**
  * Clase abstracta que implementa las operaciones comunes para servicios de citas por país.
@@ -30,10 +31,9 @@ export abstract class AppointmentCountryService implements IAppointmentCountrySe
    * @param appointment - Datos de la cita a crear
    */
   async createAppointment(appointment: IAppointmentCreate): Promise<void> {
-    await this.appointmentCountryRepository.create({
-      ...appointment,
-      lastStatus: AppointmentStatusType.PENDING,
-    });
+    await this.appointmentCountryRepository.create(
+      BaseAppointment.fromCreate(appointment)
+    );
     await this.appointmentCountryProducer.sendAppointmentCountry(appointment);
   }
 }

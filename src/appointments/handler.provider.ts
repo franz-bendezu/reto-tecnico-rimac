@@ -7,6 +7,9 @@ import { AppointmentCountryProducer } from "../appointment-country/infraestructu
 import { AppointmentDynamoDBRepository } from "./infraestructure/repositories/appointment-dynamoDB.repository";
 import { AppointmentController } from "./adapters/controllers/appointment.controller";
 
+// Aquí se usa el patrón de diseño `Inyección de Dependencias` 
+// para proveer los servicios necesarios para el controlador de citas 
+
 const config = new AppointmentConfigEnv();
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);

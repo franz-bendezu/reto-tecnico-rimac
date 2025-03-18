@@ -10,6 +10,14 @@ export const CREATE_APPOINTMENT_ROUTE = "POST /appointments";
 export const GET_ENSURED_APPOINTMENT_LIST =
   "GET /ensureds/{ensuredId}/appointments";
 
+/** Este handler es el encargado de recibir los eventos de la cola de SQS
+ * y de las peticiones HTTP para crear y obtener citas médicas.
+ * Para las peticiones HTTP, se encarga de llamar al controlador de citas médicas para procesarlas.
+ * Para los eventos de la cola de SQS, se encarga de llamar al controlador de citas médicas para completar la cita.
+ * @param event - Evento de la cola de SQS o petición HTTP
+ * @returns Respuesta de la petición HTTP o void para eventos de la cola de SQS
+ * @throws Error si el evento no es válido
+ */
 export function handler(
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2>;

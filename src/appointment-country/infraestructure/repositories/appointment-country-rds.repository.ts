@@ -12,6 +12,10 @@ export class AppointmentCountryRDSRepository
   token?: string;
   constructor(private databaseConfig: IDatabaseConfig) { }
 
+  /**
+   * Crea un token de autorización para la base de datos RDS.
+   * @returns Token de autorización
+   */
   async createAuthToken(): Promise<string> {
     // Create RDS Signer object
     const dbConfig = this.databaseConfig;
@@ -27,6 +31,11 @@ export class AppointmentCountryRDSRepository
     return token;
   }
 
+
+  /**
+   * Realiza las operaciones de conexión a la base de datos.
+   * @returns Conexión a la base de datos
+   */
   async dbOps(): Promise<Connection> {
     // Obtain auth token
     const dbConfig = this.databaseConfig;
@@ -44,6 +53,10 @@ export class AppointmentCountryRDSRepository
     return conn;
   }
 
+  /**
+   * Guarda una nueva cita en la base de datos.
+   * @param appointment - Datos de la cita a crear
+   */
   async create(appointment: IBaseAppointment): Promise<void> {
     const conn = await this.dbOps();
     const sql = `INSERT INTO appointments (insured_id, schedule_id, status, date) VALUES (?, ?, ?, ?)`;

@@ -3,19 +3,35 @@ import { registerSchema, registry } from './zod-openapi';
 import { appointmentCreateSchema, appointmentCompleteSchema } from '../common/adapters/schemas/appointment';
 import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 
-// Register schemas for OpenAPI
+/**
+ * Registros de esquemas para la documentación OpenAPI
+ * Estos esquemas definen la estructura de los datos utilizados en la API
+ */
+
+/**
+ * Esquema para la creación de citas
+ * Define la estructura de datos requerida para crear una nueva cita
+ */
 const AppointmentCreateSchema = registerSchema(
   appointmentCreateSchema,
   'AppointmentCreate',
   'Schema for creating a new appointment'
 );
 
+/**
+ * Esquema para completar citas
+ * Define la estructura de datos requerida para marcar una cita como completada
+ */
 const AppointmentCompleteSchema = registerSchema(
   appointmentCompleteSchema,
   'AppointmentComplete',
   'Schema for completing an appointment'
 );
 
+/**
+ * Esquema de respuesta para citas individuales
+ * Define la estructura de los datos devueltos para una cita
+ */
 const AppointmentResponseSchema = registerSchema(
   z.object({
     insuredId: z.string(),
@@ -27,12 +43,20 @@ const AppointmentResponseSchema = registerSchema(
   'Schema for appointment response'
 );
 
+/**
+ * Esquema de respuesta para listas de citas
+ * Define la estructura de los datos devueltos para múltiples citas
+ */
 const AppointmentListResponseSchema = registerSchema(
   z.array(AppointmentResponseSchema),
   'AppointmentListResponse',
   'Schema for appointment list response'
 );
 
+/**
+ * Esquema para respuestas de error
+ * Define la estructura de los mensajes de error devueltos por la API
+ */
 const ErrorResponseSchema = registerSchema(
   z.object({
     message: z.string(),
@@ -41,7 +65,15 @@ const ErrorResponseSchema = registerSchema(
   'Schema for error response'
 );
 
-// Register API operations directly using registry.registerPath
+/**
+ * Registro de operaciones de API
+ * Estas definiciones configuran los endpoints disponibles en la API
+ */
+
+/**
+ * Endpoint para crear una cita
+ * Permite crear una nueva cita con los datos del asegurado
+ */
 registry.registerPath({
   method: 'post',
   path: '/appointments',
@@ -69,6 +101,10 @@ registry.registerPath({
   },
 });
 
+/**
+ * Endpoint para obtener citas por ID del asegurado
+ * Permite consultar todas las citas asociadas a un asegurado específico
+ */
 registry.registerPath({
   method: 'get',
   path: '/insureds/{insuredId}/appointments',
@@ -92,7 +128,10 @@ registry.registerPath({
   },
 });
 
-// Generate the OpenAPI document
+/**
+ * Documento OpenAPI generado
+ * Contiene toda la información de la API para su documentación
+ */
 export const openApiDocument = new OpenApiGeneratorV3(registry.definitions).generateDocument({
   info: {
     title: 'Appointment Service API',

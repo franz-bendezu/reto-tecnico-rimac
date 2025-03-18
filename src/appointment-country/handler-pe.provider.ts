@@ -5,6 +5,9 @@ import { AppointmentProducer } from "./infraestructure/messasing/appointment.pro
 import { AppointmentCountryRDSRepository } from "./infraestructure/repositories/appointment-country-rds.repository";
 import { CountryAppointmentController } from "./adapters/controllers/appointment-country.controller";
 
+// Aquí se usa el patrón de diseño `Inyección de Dependencias` 
+// para proveer los servicios necesarios para el controlador de citas en Perú
+
 const config = new AppointmentPEConfigEnv();
 const appointmentProducer = new AppointmentProducer(
   new EventBridgeClient({}),

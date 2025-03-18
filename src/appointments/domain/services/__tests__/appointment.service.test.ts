@@ -142,7 +142,7 @@ describe("AppointmentService", () => {
             ],
             createdAt: "",
             updatedAt: expect.any(String),
-            countryISO: "",
+            countryISO: "PE",
         });
     });
 

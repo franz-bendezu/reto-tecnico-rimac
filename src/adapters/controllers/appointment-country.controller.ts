@@ -12,14 +12,26 @@ export class CountryAppointmentController {
         try {
             const validData = appointmentCreateSchema.parse(data);
             await this.appointmentService.createAppointment(validData);
-            return true;
+            return {
+                statusCode: 200,
+                body: { message: "Appointment created" },
+            };
         } catch (error) {
             if (error instanceof z.ZodError) {
-                console.error("Invalid appointment data", error.errors);
+                return {
+                    statusCode: 400,
+                    body: {
+                        message: error.message,
+                        errors: error.errors.map((e) => e.message),
+                    },
+                };
             } else {
-                console.error("Error processing appointment", error);
+                console.error("Error in appointment country controller:", error);
+                return {
+                    statusCode: 500,
+                    body: { message: "Internal server error" },
+                };
             }
-            return false;
         }
     }
 }

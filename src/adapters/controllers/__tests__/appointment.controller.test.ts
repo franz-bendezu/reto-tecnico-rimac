@@ -1,9 +1,9 @@
 import { AppointmentController } from "../appointment.controller";
 import { IAppointmentService } from "../../../domain/services/appointment.service.interface";
-import { z } from "zod";
 import { IAppointmentCreateSchema } from "../../interfaces/appointment.interface";
 
 describe("AppointmentController", () => {
+
     let appointmentService: jest.Mocked<IAppointmentService>;
     let appointmentController: AppointmentController;
 
@@ -15,6 +15,7 @@ describe("AppointmentController", () => {
         };
         appointmentController = new AppointmentController(appointmentService);
     });
+
     it("should create an appointment and return status 200", async () => {
         const data: IAppointmentCreateSchema = {
             insuredId: "12345",
@@ -58,5 +59,17 @@ describe("AppointmentController", () => {
             statusCode: 500,
             body: { message: "Internal server error" },
         });
+    });
+
+    it("should return status 400 if zod validation fails", async () => {
+        const data = { insuredId: "12345", scheduleId: "invalid", countryISO: "PE" };
+
+        const result = await appointmentController.createAppointment(data);
+
+        expect(result.statusCode).toBe(400);
+        expect(result.body.message).toBeDefined();
+        if ('errors' in result.body) {
+            expect(result.body.errors).toBeDefined();
+        }
     });
 });

@@ -1,6 +1,6 @@
 import { AppointmentController } from "../appointment.controller";
 import { IAppointmentCreateSchema, IAppointmentCompleteSchema } from "../../../../common/adapters/interfaces/appointment.interface";
-import { IBaseAppointment } from "../../../../common/domain/interfaces/appointment";
+import { IAppointment, IBaseAppointment } from "../../../../common/domain/interfaces/appointment";
 import { IAppointmentService } from "../../../domain/services/appointment.service.interface";
 
 
@@ -24,14 +24,26 @@ describe("AppointmentController", () => {
             scheduleId: 1,
             countryISO: "PE"
         };
-        appointmentService.createAppointment.mockResolvedValueOnce();
+        const saveData: IAppointment = {
+            insuredId: "12345",
+            scheduleId: 1,
+            countryISO: "PE",
+            lastStatus: "pending",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            statuses: [{
+                status: "pending",
+                createdAt: new Date().toISOString()
+            }]
+        }
+        appointmentService.createAppointment.mockResolvedValueOnce(saveData);
 
         const result = await appointmentController.createAppointment(data);
 
         expect(appointmentService.createAppointment).toHaveBeenCalledWith(data);
         expect(result).toEqual({
             statusCode: 200,
-            body: { message: "Appointment created" },
+            body: { message: "El agendamiento está en proceso", data: saveData },
         });
     });
 
@@ -109,7 +121,7 @@ describe("AppointmentController", () => {
     });
 
     it("should complete an appointment and return status 200", async () => {
-        const data:IAppointmentCompleteSchema = { insuredId: "12345", scheduleId: 1 };
+        const data: IAppointmentCompleteSchema = { insuredId: "12345", scheduleId: 1 };
         appointmentService.completeAppointment.mockResolvedValueOnce();
 
         const result = await appointmentController.completeAppointment(data);

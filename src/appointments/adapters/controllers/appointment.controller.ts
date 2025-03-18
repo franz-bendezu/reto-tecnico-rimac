@@ -9,10 +9,13 @@ export class AppointmentController {
     async createAppointment(data: unknown) {
         try {
             const validData = appointmentCreateSchema.parse(data);
-            await this.appointmentService.createAppointment(validData);
+            const result = await this.appointmentService.createAppointment(validData);
             return {
                 statusCode: 200,
-                body: { message: "El agendamiento está en proceso" },
+                body: {
+                    message: "El agendamiento está en proceso",
+                    data: result,
+                },
             };
         } catch (error) {
             return this.handleError(error);

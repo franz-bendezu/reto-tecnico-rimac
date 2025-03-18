@@ -112,9 +112,13 @@ provider:
         - POST
         - OPTIONS
       maxAge: 6000 # In seconds
-  
+
 resources:
   Resources:
+    AppointmentEventBus:
+      Type: AWS::Events::EventBus
+      Properties:
+        Name: ${self:provider.environment.EVENT_BUS_NAME}
     AppointmentTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -145,11 +149,11 @@ resources:
               Principal:
                 Service: "sns.amazonaws.com"
               Action: "sqs:SendMessage"
-              Resource: 
+              Resource:
                 Fn::GetAtt: [sqsPE, Arn]
               Condition:
                 ArnEquals:
-                  "aws:SourceArn": 
+                  "aws:SourceArn":
                     Ref: sns
 
     SQSQueuePolicyCL:
@@ -165,11 +169,11 @@ resources:
               Principal:
                 Service: "sns.amazonaws.com"
               Action: "sqs:SendMessage"
-              Resource: 
+              Resource:
                 Fn::GetAtt: [sqsCL, Arn]
               Condition:
                 ArnEquals:
-                  "aws:SourceArn": 
+                  "aws:SourceArn":
                     Ref: sns
     sns:
       Type: AWS::SNS::Topic
@@ -218,21 +222,47 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: "SqsAppointmentCompleted"
-
+    SQSQueuePolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        Queues:
+          - Ref: sqs
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: events.amazonaws.com
+              Action: sqs:SendMessage
+              Resource:
+                Fn::GetAtt: [sqs, Arn]
+              Condition:
+                ArnEquals:
+                  "aws:SourceArn":
+                    Fn::GetAtt: [evAppointment, Arn]
     evAppointment:
       Type: AWS::Events::Rule
       Properties:
+        State: ENABLED
+        EventBusName: ${self:provider.environment.EVENT_BUS_NAME}
         EventPattern:
           source:
-            - "appointment.service"
+            - ${self:provider.environment.EVENT_SOURCE}
           detail-type:
-            - "appointmentCompleted"
+            - ${self:provider.environment.EVENT_DETAIL_TYPE}
         Targets:
           - Arn:
               Fn::GetAtt:
                 - sqs
                 - Arn
             Id: SQSCompletedTarget
+            InputTransformer:
+              InputPathsMap:
+                detail: "$.detail"
+              InputTemplate: |
+                {
+                  "detail": <detail>
+                }
 
 functions:
   appointment:

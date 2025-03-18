@@ -25,9 +25,12 @@ export async function handler(
 ): Promise<void | APIGatewayProxyResultV2 | SQSBatchResponse> {
   try {
     if ("Records" in event) {
-      for (const record of event.Records) {
-        await appointmentController.completeAppointment(JSON.parse(record.body));
-      }
+      await Promise.all(
+        event.Records.map(async (record) => {
+          const recordBody = JSON.parse(record.body);
+          await appointmentController.completeAppointment(recordBody.detail);
+        })
+      );
     } else if (event.routeKey === CREATE_APPOINTMENT_ROUTE) {
       const result = await appointmentController.createAppointment(
         JSON.parse(event.body || "{}")

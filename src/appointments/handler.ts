@@ -7,6 +7,7 @@ import type {
 import { appointmentController } from "./handler.provider";
 import { CREATE_APPOINTMENT_ROUTE, GET_INSURED_APPOINTMENT_LIST_ROUTE, INSURED_ID_PARAM } from "./adapters/constants/handler-routes.constant";
 import { createBadRequestResponse, createErrorResponse, createSuccessResponse } from "../common/adapters/utils/api-response.utils";
+import { ResponseMessage, StatusCode } from "../common/adapters/constants/api-response.constants";
 
 /** Este handler es el encargado de recibir los eventos de la cola de SQS
  * y de las peticiones HTTP para crear y obtener citas médicas.
@@ -37,10 +38,10 @@ export async function handler(
       );
       return createSuccessResponse(
         {
-          message: "El agendamiento está en proceso",
+          message: ResponseMessage.APPOINTMENT_IN_PROCESS,
           data: result,
         },
-        201
+        StatusCode.CREATED
       );
     } else if (event.routeKey === GET_INSURED_APPOINTMENT_LIST_ROUTE) {
       const appointments = await appointmentController.getAppointmentsByInsuredId(
@@ -48,7 +49,7 @@ export async function handler(
       );
       return createSuccessResponse({ appointments });
     } else {
-      return createBadRequestResponse("Bad request");
+      return createBadRequestResponse(ResponseMessage.BAD_REQUEST);
     }
   } catch (error) {
     return createErrorResponse(error);

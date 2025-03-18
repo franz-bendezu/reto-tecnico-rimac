@@ -90,6 +90,27 @@ describe("AppointmentDynamoDBRepository", () => {
         expect(result).toEqual(mockItems);
     });
 
+
+    it("should return an empty array when no appointments are found", async () => {
+        const insuredId = "123";
+        const mockItems: IAppointment[] = [];
+
+        docClient.send.mockImplementationOnce(
+            (): ScanCommandOutput => ({
+                Items: mockItems,
+                $metadata: {
+                    requestId: "123",
+                },
+            })
+        );
+
+        const result = await repository.getAllByEnsuranceId(insuredId);
+
+        expect(docClient.send).toHaveBeenCalledWith(expect.any(ScanCommand));
+
+        expect(result).toEqual(mockItems);
+    });
+
     it("should update the status of an appointment", async () => {
         const insuredId = "123";
         const scheduleId = 1;

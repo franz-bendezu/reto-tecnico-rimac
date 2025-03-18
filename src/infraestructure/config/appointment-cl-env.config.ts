@@ -4,7 +4,7 @@ import { getRequiredEnv, getRequiredNumericEnv } from "./utils/env-validator";
 
 export class AppointmentCLConfigEnv extends AppointmentCountryEnvConfig {
   override get rdsDatabase(): IDatabaseConfig {
-    const awsRegion = super.awsRegion;
+    const countryConfig = this;
     return {
       get proxyHostName(): string {
         return getRequiredEnv('DB_CL_PROXY_HOST_NAME');
@@ -19,7 +19,7 @@ export class AppointmentCLConfigEnv extends AppointmentCountryEnvConfig {
         return getRequiredEnv('DB_CL_USER_NAME');
       },
       get awsRegion(): string {
-        return awsRegion;
+        return countryConfig.awsRegion;
       },
     };
   }

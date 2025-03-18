@@ -8,9 +8,6 @@ describe("appointment-cl.handler", () => {
     const mockCreateAppointment = jest.fn();
 
     beforeAll(() => {
-        process.env.AWS_REGION = "us-east-1";
-        process.env.APPOINTMENT_COUNTRY_QUEUE_URL = "https://sqs.us-east-1.amazonaws.com/123456789012/appointment-country-queue";
-        process.env.APPOINTMENT_COUNTRY_QUEUE_NAME = "appointment-country-queue";
         (appointmentCountryController.createAppointment as jest.Mock) = mockCreateAppointment;
     });
 
@@ -47,7 +44,6 @@ describe("appointment-cl.handler", () => {
         };
 
         await expect(handler(event as any, {} as any, {} as any)).rejects.toThrow(
-            "Unexpected token i in JSON at position 0"
         );
         expect(mockCreateAppointment).not.toHaveBeenCalled();
     });

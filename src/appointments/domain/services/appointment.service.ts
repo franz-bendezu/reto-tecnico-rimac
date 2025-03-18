@@ -3,6 +3,7 @@ import { IAppointmentRepository } from "../../infraestructure/repositories/appoi
 import { IAppointment, IBaseAppointment } from "../../../common/domain/interfaces/appointment";
 import { IAppointmentCreate } from "../../../common/domain/interfaces/appointment-create";
 import { AppointmentStatusType } from "../../../common/domain/models/appointment-status";
+import { BaseAppointment } from "../../../common/domain/models/base-appointment.model";
 import { IAppointmentService } from "./appointment.service.interface";
 
 /**
@@ -26,12 +27,13 @@ export class AppointmentService implements IAppointmentService {
    * @param newAppointment - Datos de la nueva cita a crear
    */
   async createAppointment(newAppointment: IAppointmentCreate): Promise<IAppointment> {
-    const appointment: IBaseAppointment = {
-      insuredId: newAppointment.insuredId,
-      scheduleId: newAppointment.scheduleId,
-      countryISO: newAppointment.countryISO,
-      lastStatus: AppointmentStatusType.PENDING,
-    };
+    const appointment = new BaseAppointment(
+      newAppointment.insuredId,
+      newAppointment.scheduleId,
+      newAppointment.countryISO,
+      AppointmentStatusType.PENDING
+    );
+    
     const result = await this.appointmentRepository.create(appointment);
     await this.appointmentCountryProducer.sendAppointment(newAppointment);
 

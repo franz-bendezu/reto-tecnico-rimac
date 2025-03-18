@@ -12,12 +12,10 @@ export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (
 ) => {
   if ("Records" in event) {
     for (const record of event.Records) {
-      const { insuredId, scheduleId } = JSON.parse(record.body);
-      await appointmentController.completeAppointment(insuredId, scheduleId);
+      await appointmentController.completeAppointment(JSON.parse(record.body));
     }
   } else if (event.routeKey === "POST /appointments") {
-    const data = JSON.parse(event.body || "{}");
-    const result = await appointmentController.createAppointment(data);
+    const result = await appointmentController.createAppointment(JSON.parse(event.body || "{}"));
     return {
       statusCode: result.statusCode,
       body: JSON.stringify(result.body),
@@ -25,8 +23,7 @@ export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (
 
   } else if (event.routeKey === "GET /ensureds/{ensuredId}/appointments") {
     try {
-      const ensuredId = insuredIdSchema.parse(event.pathParameters?.ensuredId);
-      const result = await appointmentController.getAppointmentsByInsuredId(ensuredId);
+      const result = await appointmentController.getAppointmentsByInsuredId(event.pathParameters?.ensuredId);
       return {
         statusCode: result.statusCode,
         body: JSON.stringify(result.body),

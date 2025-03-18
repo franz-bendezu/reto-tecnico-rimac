@@ -7,3 +7,8 @@ export const appointmentCreateSchema = z.object({
   scheduleId: z.number(),
   countryISO: z.enum(COUNTRIES_ISO),
 });
+
+export const appointmentCompleteSchema = z.object({
+  insuredId: insuredIdSchema,
+  scheduleId: z.number(),
+});

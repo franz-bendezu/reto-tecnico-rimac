@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { appointmentCreateSchema } from "../schemas/appointment";
+import { appointmentCompleteSchema, appointmentCreateSchema } from "../schemas/appointment";
 import { IAppointmentService } from "../../domain/services/appointment.service.interface";
+import { insuredIdSchema } from "../schemas/insured";
 
 export class AppointmentController {
     constructor(private readonly appointmentService: IAppointmentService) { }
@@ -20,6 +21,7 @@ export class AppointmentController {
 
     async getAppointmentsByInsuredId(insuredId: unknown) {
         try {
+            const ensuredId = insuredIdSchema.parse(insuredId);
             const appointments = await this.appointmentService.getAppointmentsByInsuredId(
                 insuredId as string
             );
@@ -32,8 +34,9 @@ export class AppointmentController {
         }
     }
 
-    async completeAppointment(insuredId: string, scheduleId: number) {
+    async completeAppointment(data: unknown) {
         try {
+            const { insuredId, scheduleId } = appointmentCompleteSchema.parse(data);
             await this.appointmentService.completeAppointment(insuredId, scheduleId);
             return {
                 statusCode: 200,

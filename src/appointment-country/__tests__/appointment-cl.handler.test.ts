@@ -4,14 +4,11 @@ import { appointmentCountryController } from "../handler-cl.provider";
 jest.mock("../handler-cl.provider");
 
 describe("appointment-cl.handler", () => {
-    const mockCreateAppointment = jest.fn();
+    let mockCreateAppointment: jest.SpyInstance;
 
-    beforeAll(() => {
-        (appointmentCountryController.createAppointment as jest.Mock) = mockCreateAppointment;
-    });
-
-    afterEach(() => {
+    beforeEach(() => {
         jest.clearAllMocks();
+        mockCreateAppointment = jest.spyOn(appointmentCountryController, "createAppointment").mockImplementation(jest.fn());
     });
 
     it("should process all records in the event", async () => {
@@ -42,8 +39,7 @@ describe("appointment-cl.handler", () => {
             Records: [{ body: "invalid JSON" }],
         };
 
-        await expect(handler(event as any, {} as any, {} as any)).rejects.toThrow(
-        );
+        await expect(handler(event as any, {} as any, {} as any)).rejects.toThrow();
         expect(mockCreateAppointment).not.toHaveBeenCalled();
     });
 });

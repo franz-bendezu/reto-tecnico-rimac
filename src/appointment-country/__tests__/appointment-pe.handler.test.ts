@@ -5,8 +5,7 @@ import { appointmentCountryController } from "../handler-pe.provider";
 jest.mock("../handler-pe.provider");
 
 describe("appointment-pe.handler", () => {
-    const mockCreateAppointment = jest.fn();
-    appointmentCountryController.createAppointment = mockCreateAppointment;
+    let mockCreateAppointment: jest.SpyInstance;
 
     const mockEvent = {
         Records: [
@@ -18,6 +17,7 @@ describe("appointment-pe.handler", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        mockCreateAppointment = jest.spyOn(appointmentCountryController, "createAppointment");
     });
 
     it("should call createAppointment with the correct appointment data", async () => {

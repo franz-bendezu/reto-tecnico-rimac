@@ -8,7 +8,6 @@ export const handler: SQSHandler = async (event) => {
         const recordBody = JSON.parse(record.body);
         const recordMessage = JSON.parse(recordBody.Message);
         await appointmentCountryController.createAppointment(recordMessage);
-        console.log("Appointment created successfully for Peru");
       })
     );
   } catch (error) {

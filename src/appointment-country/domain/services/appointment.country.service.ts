@@ -6,6 +6,11 @@ import { IAppointmentCountryService } from "./appointment-country.service.interf
 
 /**
  * Clase abstracta que implementa las operaciones comunes para servicios de citas por país.
+ * Esta clase forma parte del patrón Strategy, donde:
+ * - AppointmentCountryService actúa como la estrategia abstracta base
+ * - AppointmentPEService y AppointmentCLService son las estrategias concretas
+ * - IAppointmentCountryService define el contrato de la estrategia
+ * 
  * Proporciona funcionalidad base que debe ser extendida por implementaciones específicas de cada país.
  */
 export abstract class AppointmentCountryService implements IAppointmentCountryService {

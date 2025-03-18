@@ -26,12 +26,11 @@ https://xxxxxx.execute-api.us-east-1.amazonaws.com/dev
 #### Respuesta Exitosa
 ```json
 {
-    "id": "uuid-123",
     "insuredId": "12345",
     "scheduleId": 123,
     "countryISO": "PE",
     "lasStatus": "pending",
-    "createdAt": "2024-03-18T10:00:00Z"
+    "createdAt": "2024-03-18T10:00:00Z",
 }
 ```
 

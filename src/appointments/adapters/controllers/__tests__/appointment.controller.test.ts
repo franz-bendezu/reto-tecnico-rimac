@@ -92,7 +92,7 @@ describe("AppointmentController", () => {
         const appointments: IBaseAppointment[] = [{
             insuredId: "12345",
             scheduleId: 1,
-            countryISO: "ES",
+            countryISO: "PE",
             lastStatus: "pending"
         }];
         appointmentService.getAppointmentsByInsuredId.mockResolvedValueOnce(appointments);

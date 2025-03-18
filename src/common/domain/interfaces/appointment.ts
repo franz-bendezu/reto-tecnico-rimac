@@ -1,3 +1,4 @@
+import { CountryISO } from "./appointment-create";
 import {
   AppointmentStatusTypes,
   IAppointmentStatus,
@@ -6,7 +7,7 @@ import {
 export interface IBaseAppointment {
   insuredId: string;
   scheduleId: number;
-  countryISO: string;
+  countryISO: CountryISO;
   lastStatus: AppointmentStatusTypes;
 }
 

@@ -71,7 +71,7 @@ describe("AppointmentDynamoDBRepository", () => {
                 statuses: [],
                 createdAt: "",
                 updatedAt: "",
-                countryISO: "",
+                countryISO: "PE",
             },
         ];
 
@@ -154,7 +154,7 @@ describe("AppointmentDynamoDBRepository", () => {
             lastStatus: status,
             createdAt: "",
             updatedAt: "",
-            countryISO: "",
+            countryISO: "PE",
         });
         expect(docClient.send).toHaveBeenCalledWith(expect.any(PutCommand));
     });

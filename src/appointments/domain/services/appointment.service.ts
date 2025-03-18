@@ -5,6 +5,7 @@ import { IAppointmentCreate } from "../../../common/domain/interfaces/appointmen
 import { AppointmentStatusType } from "../../../common/domain/models/appointment-status";
 import { BaseAppointment } from "../../../common/domain/models/base-appointment.model";
 import { IAppointmentService } from "./appointment.service.interface";
+import { Appointment } from "../../../common/domain/models/appointment.model";
 
 /**
  * Implementación principal del servicio de citas médicas.
@@ -27,14 +28,12 @@ export class AppointmentService implements IAppointmentService {
    * @param newAppointment - Datos de la nueva cita a crear
    */
   async createAppointment(newAppointment: IAppointmentCreate): Promise<IAppointment> {
-    const appointment = new BaseAppointment(
+    const result = await this.appointmentRepository.create(new BaseAppointment(
       newAppointment.insuredId,
       newAppointment.scheduleId,
       newAppointment.countryISO,
       AppointmentStatusType.PENDING
-    );
-    
-    const result = await this.appointmentRepository.create(appointment);
+    ));
     await this.appointmentCountryProducer.sendAppointment(newAppointment);
 
     return result;
@@ -69,7 +68,7 @@ export class AppointmentService implements IAppointmentService {
     const existingStatuses = item.statuses;
     const status = AppointmentStatusType.COMPLETED;
     await this.appointmentRepository.updateAppointment(
-      {
+      Appointment.from({
         ...item,
         lastStatus: status,
         updatedAt: new Date().toISOString(),
@@ -81,6 +80,6 @@ export class AppointmentService implements IAppointmentService {
           },
         ],
       }
-    );
+      ));
   }
 }

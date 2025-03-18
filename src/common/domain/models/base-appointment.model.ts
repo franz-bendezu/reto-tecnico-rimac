@@ -1,4 +1,5 @@
 import { IBaseAppointment } from "../interfaces/appointment";
+import { CountryISO } from "../interfaces/appointment-create";
 import { AppointmentStatusType } from "./appointment-status";
 
 /**
@@ -15,7 +16,7 @@ export class BaseAppointment implements IBaseAppointment {
     constructor(
         public insuredId: string,
         public scheduleId: number,
-        public countryISO: string,
+        public countryISO: CountryISO,
         public lastStatus: AppointmentStatusType
     ) { }
 }

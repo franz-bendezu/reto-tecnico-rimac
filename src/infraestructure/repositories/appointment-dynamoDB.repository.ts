@@ -9,9 +9,11 @@ import {
 import { IAppointmentRepository } from "./appointment.repository.interface";
 import { IAppointmentConfig } from "../config/appointment.config.interface";
 
+export type AppointmentDynamoClient  = Pick<DynamoDBDocumentClient, "send">;
+
 export class AppointmentDynamoDBRepository implements IAppointmentRepository {
 
-  constructor(private docClient: DynamoDBDocumentClient, private config: IAppointmentConfig) {}
+  constructor(private docClient: AppointmentDynamoClient, private config: IAppointmentConfig) {}
 
   async create(appointment: IBaseAppointment): Promise<void> {
     await this.docClient.send(

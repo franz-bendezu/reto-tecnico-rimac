@@ -26,7 +26,7 @@ export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (
       const result = await appointmentController.getAppointmentsByInsuredId(event.pathParameters?.ensuredId);
       return {
         statusCode: result.statusCode,
-        body: JSON.stringify(result.body),
+        body: JSON.stringify(result.body),  
       };
     } catch (error) {
       return {

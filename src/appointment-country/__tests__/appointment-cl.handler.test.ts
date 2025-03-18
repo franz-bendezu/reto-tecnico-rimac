@@ -1,3 +1,4 @@
+import { IAppointmentCreate } from "../../common/domain/interfaces/appointment-create";
 import { handler } from "../handler-cl";
 import { appointmentCountryController } from "../handler-cl.provider";
 
@@ -8,22 +9,39 @@ describe("appointment-cl.handler", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        mockCreateAppointment = jest.spyOn(appointmentCountryController, "createAppointment").mockImplementation(jest.fn());
+        mockCreateAppointment = jest
+            .spyOn(appointmentCountryController, "createAppointment")
+            .mockImplementation(jest.fn());
     });
 
     it("should process all records in the event", async () => {
+        const items: IAppointmentCreate[] = [
+            { insuredId: "123", scheduleId: 1, countryISO: "CL" },
+            { insuredId: "456", scheduleId: 2, countryISO: "CL" },
+        ];
         const event = {
-            Records: [
-                { body: JSON.stringify({ id: 1, name: "Appointment 1" }) },
-                { body: JSON.stringify({ id: 2, name: "Appointment 2" }) },
-            ],
+            Records: items.map((item) => ({
+                body: JSON.stringify(item),
+            })),
         };
 
         await handler(event as any, {} as any, {} as any);
 
         expect(mockCreateAppointment).toHaveBeenCalledTimes(2);
-        expect(mockCreateAppointment).toHaveBeenCalledWith({ id: 1, name: "Appointment 1" });
-        expect(mockCreateAppointment).toHaveBeenCalledWith({ id: 2, name: "Appointment 2" });
+        expect(mockCreateAppointment).toHaveBeenCalledWith(
+            expect.objectContaining({
+                insuredId: "123",
+                scheduleId: 1,
+                countryISO: "CL",
+            })
+        );
+        expect(mockCreateAppointment).toHaveBeenCalledWith(
+            expect.objectContaining({
+                insuredId: "456",
+                scheduleId: 2,
+                countryISO: "CL",
+            })
+        );
     });
 
     it("should handle empty event records", async () => {

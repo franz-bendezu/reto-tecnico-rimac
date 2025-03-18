@@ -8,7 +8,7 @@ import { CountryAppointmentController } from "../controllers/appointment-country
 const config = new AppointmentCLConfigEnv();
 const appointmentProducer = new AppointmentProducer(
   new EventBridgeClient({}),
-  config
+  config.eventBridge
 );
 const appointmentCountryRepository = new AppointmentCountryRDSRepository(
   config.rdsDatabase

@@ -1,0 +1,217 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: octatec
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: appointment
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: appointment
+
+build:
+  esbuild:
+    # Enable or Disable bundling the function code and dependencies. (Default: true)
+    bundle: true
+    # Enable minifying function code. (Default: false)
+    minify: false
+    # NPM packages to not be bundled, as well as not included in node_modules
+    # in the zip file uploaded to Lambda. By default this will be set to aws-sdk
+    # if the runtime is set to nodejs16.x or lower or set to @aws-sdk/* if set to nodejs18.x or higher.
+    # Glob patterns are supported here.
+    exclude:
+      - "@aws-sdk/*"
+    # The packages config, this can be set to override the behavior of external
+    # If this is set then all dependencies will be treated as external and not bundled.
+    packages: external
+    # By default Framework will attempt to build and package all functions concurrently.
+    # This property can bet set to a different number if you wish to limit the
+    # concurrency of those operations.
+    buildConcurrency: 3
+    # Enable or configure sourcemaps, can be set to true or to an object with further configuration.
+    sourcemap:
+      # The sourcemap type to use, options are (inline, linked, or external)
+      type: linked
+      # Whether to set the NODE_OPTIONS on functions to enable sourcemaps on Lambda
+      setNodeOptions: true
+
+stages:
+  default:
+    params:
+      tableName: "appointment-table-${sls:stage}"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt:
+                - AppointmentTable
+                - Arn
+        - Effect: Allow
+          Action:
+            - sns:Publish
+          Resource:
+            - Ref: sns
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+          Resource:
+            - Fn::GetAtt:
+                - sqs
+                - Arn
+            - Fn::GetAtt:
+                - sqsPE
+                - Arn
+            - Fn::GetAtt:
+                - sqsCL
+                - Arn
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource:
+            - Fn::Join:
+                - ""
+                - - "arn:aws:events:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":event-bus/"
+                  - Ref: environment.EVENT_BUS_NAME
+        - Effect: Allow
+          Action:
+            - events:PutRule
+            - events:PutTargets
+          Resource:
+            - Fn::GetAtt:
+                - evAppointment
+                - Arn
+
+  environment:
+    APPOINTMENT_TABLE: ${param:tableName}
+    SNS_TOPIC_ARN:
+      Ref: sns
+    EVENT_BUS_NAME: "appointment-service"
+    EVENT_SOURCE: "appointment.service"
+    EVENT_DETAIL_TYPE: "appointmentCompleted"
+
+resources:
+  Resources:
+    AppointmentTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${param:tableName}
+        AttributeDefinitions:
+          - AttributeName: scheduleId
+            AttributeType: N
+          - AttributeName: insuredId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: insuredId
+            KeyType: HASH
+          - AttributeName: scheduleId
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    sns:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: Appointment
+    sqsPE:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: SqsAppointmentPe
+    sqsCL:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: SqsAppointmentCl
+
+    SNSQueuePolicyPE:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: sqs
+        Endpoint:
+          Fn::GetAtt:
+            - sqsPE
+            - Arn
+        TopicArn:
+          Ref: sns
+        FilterPolicy:
+          countryISO:
+            - "PE" # Filtra mensajes cuyo countryISO es "PE"
+        RawMessageDelivery: true
+
+    SNSQueuePolicyCL:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: sqs
+        Endpoint:
+          Fn::GetAtt:
+            - sqsCL
+            - Arn
+        TopicArn:
+          Ref: sns
+        FilterPolicy:
+          countryISO:
+            - "CL" # Filtra mensajes cuyo countryISO es "CL"
+        RawMessageDelivery: true
+
+    sqs:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: "SqsAppointmentCompleted"
+
+    evAppointment:
+      Type: AWS::Events::Rule
+      Properties:
+        EventPattern:
+          source:
+            - "appointment.service"
+          detail-type:
+            - "appointmentCompleted"
+        Targets:
+          - Arn:
+              Fn::GetAtt:
+                - sqs
+                - Arn
+            Id: SQSCompletedTarget
+
+functions:
+  appointment:
+    handler: src/adapters/handlers/appointmentHandler.handler
+    events:
+      - httpApi:
+          path: /appointments
+          method: post
+      - httpApi:
+          path: /insureds/{insuredId}/appointments
+          method: get
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - sqs
+              - Arn
+  appointment_cl:
+    handler: src/adapters/handlers/appointmentPEHandler.handler
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - sqsPE
+              - Arn
+  appointment_pe:
+    handler: src/adapters/handlers/appointmentCLHandler.handler
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - sqsCL
+              - Arn

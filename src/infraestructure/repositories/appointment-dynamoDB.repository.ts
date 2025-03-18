@@ -48,30 +48,13 @@ export class AppointmentDynamoDBRepository implements IAppointmentRepository {
     return Items as IAppointment[];
   }
 
-  async updateStatusById(
-    insuredId: string,
-    scheduleId: number,
-    status: string
+  async updateAppointment(
+    item: IAppointment,
   ): Promise<void> {
-    const Item = await this.getAppointmentDetail(insuredId, scheduleId);
-
-    const existingStatuses = Item?.statuses || [];
-
     await this.docClient.send(
       new PutCommand({
         TableName: this.config.dynamoDBTableName,
-        Item: {
-          ...Item,
-          lastStatus: status,
-          updatedAt: new Date().toISOString(),
-          statuses: [
-            ...existingStatuses,
-            {
-              status,
-              date: new Date().toISOString(),
-            },
-          ],
-        },
+        Item: item,
       })
     );
   }

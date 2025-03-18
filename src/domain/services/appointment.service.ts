@@ -9,7 +9,7 @@ export class AppointmentService implements IAppointmentService {
   constructor(
     private appointmentRepository: IAppointmentRepository,
     private appointmentCountryProducer: IAppointmentCountryProducer
-  ) {}
+  ) { }
 
   async createAppointment(newAppointment: IAppointmentCreate): Promise<void> {
     const appointment: IBaseAppointment = {
@@ -32,10 +32,25 @@ export class AppointmentService implements IAppointmentService {
     insuredId: string,
     scheduleId: number
   ): Promise<void> {
-    await this.appointmentRepository.updateStatusById(
-      insuredId,
-      scheduleId,
-      AppointmentStatusType.COMPLETED
+    const item = await this.appointmentRepository.getAppointmentDetail(insuredId, scheduleId);
+    if (!item) {
+      throw new Error("Appointment not found");
+    }
+    const existingStatuses = item?.statuses || [];
+    const status = AppointmentStatusType.COMPLETED;
+    await this.appointmentRepository.updateAppointment(
+      {
+        ...item,
+        lastStatus: status,
+        updatedAt: new Date().toISOString(),
+        statuses: [
+          ...existingStatuses,
+          {
+            status,
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      }
     );
   }
 }

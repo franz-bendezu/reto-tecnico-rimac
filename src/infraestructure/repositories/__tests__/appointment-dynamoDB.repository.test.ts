@@ -118,9 +118,24 @@ describe("AppointmentDynamoDBRepository", () => {
             })
         );
 
-        await repository.updateStatusById(insuredId, scheduleId, status);
-
-        expect(docClient.send).toHaveBeenCalledWith(expect.any(GetCommand));
+        await repository.updateAppointment({
+            insuredId,
+            scheduleId,
+            statuses: [
+                {
+                    status: "pending",
+                    createdAt: "",
+                },
+                {
+                    status: "completed",
+                    createdAt: "",
+                },
+            ],
+            lastStatus: status,
+            createdAt: "",
+            updatedAt: "",
+            countryISO: "",
+        });
         expect(docClient.send).toHaveBeenCalledWith(expect.any(PutCommand));
     });
 });

@@ -1,15 +1,12 @@
 import { IAppointment, IBaseAppointment } from "../../domain/interfaces/appointment";
-import { AppointmentStatusTypes } from "../../domain/interfaces/appointment-status";
 
 export interface IAppointmentRepository {
   create(appointment: IBaseAppointment): Promise<void>;
 
   getAllByEnsuranceId(insuredId: string): Promise<IBaseAppointment[]>;
 
-  updateStatusById(
-    insuredId: string,
-    scheduleId: number,
-    status: AppointmentStatusTypes
+  updateAppointment(
+    item: IAppointment,
   ): Promise<void>;
 
   getAppointmentDetail(insuredId: string, scheduleId: number): Promise<IAppointment | null | undefined>;

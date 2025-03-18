@@ -1,4 +1,4 @@
-import { IBaseAppointment } from "../../../common/domain/interfaces/appointment";
+import { IAppointment, IBaseAppointment } from "../../../common/domain/interfaces/appointment";
 import { IAppointmentCreate } from "../../../common/domain/interfaces/appointment-create";
 
 /**
@@ -9,7 +9,7 @@ export interface IAppointmentService {
    * Crea una nueva cita médica en el sistema.
    * @param appointment - Datos de la cita a crear
    */
-  createAppointment(appointment: IAppointmentCreate): Promise<void>;
+  createAppointment(appointment: IAppointmentCreate): Promise<IAppointment>;
 
   /**
    * Obtiene todas las citas asociadas a un asegurado por su identificador.

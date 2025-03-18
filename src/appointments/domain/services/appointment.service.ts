@@ -1,6 +1,6 @@
 import { IAppointmentCountryProducer } from "../../../appointment-country/infraestructure/messasing/appointment-country.producer.interface";
 import { IAppointmentRepository } from "../../infraestructure/repositories/appointment.repository.interface";
-import { IBaseAppointment } from "../../../common/domain/interfaces/appointment";
+import { IAppointment, IBaseAppointment } from "../../../common/domain/interfaces/appointment";
 import { IAppointmentCreate } from "../../../common/domain/interfaces/appointment-create";
 import { AppointmentStatusType } from "../../../common/domain/models/appointment-status";
 import { IAppointmentService } from "./appointment.service.interface";
@@ -25,15 +25,17 @@ export class AppointmentService implements IAppointmentService {
    * envía la información al sistema específico del país correspondiente.
    * @param newAppointment - Datos de la nueva cita a crear
    */
-  async createAppointment(newAppointment: IAppointmentCreate): Promise<void> {
+  async createAppointment(newAppointment: IAppointmentCreate): Promise<IAppointment> {
     const appointment: IBaseAppointment = {
       insuredId: newAppointment.insuredId,
       scheduleId: newAppointment.scheduleId,
       countryISO: newAppointment.countryISO,
       lastStatus: AppointmentStatusType.PENDING,
     };
-    await this.appointmentRepository.create(appointment);
+    const result = await this.appointmentRepository.create(appointment);
     await this.appointmentCountryProducer.sendAppointment(newAppointment);
+
+    return result;
   }
 
   /**

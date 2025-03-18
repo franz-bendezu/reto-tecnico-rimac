@@ -41,6 +41,7 @@ const AppointmentResponseSchema = registerSchema(
     countryISO: countryISOSchema,
     createdAt: z.string(),
     updatedAt: z.string(),
+    lastStatus: z.string(),
     statuses: z.array(
       z.object({
         status: z.string(),
@@ -122,7 +123,7 @@ registry.registerPath({
   tags: ['Citas'],
   request: {
     params: z.object({
-      insuredId: z.string(),
+      insuredId: insuredIdSchema,
     }),
   },
   responses: {

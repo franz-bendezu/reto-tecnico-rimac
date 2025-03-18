@@ -145,6 +145,17 @@ describe("AppointmentService", () => {
         });
     });
 
+    it("should throw an error if appointment not found", async () => {
+        const insuredId = "123";
+        const scheduleId = 1;
+
+        mockAppointmentRepository.getAppointmentDetail.mockResolvedValue(null);
+
+        await expect(
+            appointmentService.completeAppointment(insuredId, scheduleId)
+        ).rejects.toThrow("Appointment not found");
+    });
+
     it("should throw an error if repository updateStatusById fails", async () => {
         const insuredId = "123";
         const scheduleId = 1;

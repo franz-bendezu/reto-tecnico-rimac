@@ -19,10 +19,13 @@
           "insuredId": {
             "type": "string",
             "minLength": 5,
-            "maxLength": 5
+            "maxLength": 5,
+            "pattern": "^\\d{5}$",
+            "description": "Código de asegurado"
           },
           "scheduleId": {
-            "type": "number"
+            "type": "number",
+            "minimum": 0
           },
           "countryISO": {
             "type": "string",
@@ -45,10 +48,13 @@
           "insuredId": {
             "type": "string",
             "minLength": 5,
-            "maxLength": 5
+            "maxLength": 5,
+            "pattern": "^\\d{5}$",
+            "description": "Código de asegurado"
           },
           "scheduleId": {
-            "type": "number"
+            "type": "number",
+            "minimum": 0
           }
         },
         "required": [
@@ -133,7 +139,7 @@
         }
       }
     },
-    "/insureds/{insuredId}/appointments": {
+    "/ensureds/{ensuredId}/appointments": {
       "get": {
         "summary": "Obtener citas por ID del asegurado",
         "description": "Recuperar todas las citas para una persona asegurada específica",

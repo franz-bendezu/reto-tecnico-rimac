@@ -8,8 +8,8 @@ import { appointmentController } from "./handler.provider";
 
 export const CREATE_APPOINTMENT_PATH = "/appointments";
 export const CREATE_APPOINTMENT_ROUTE = `POST ${CREATE_APPOINTMENT_PATH}`;
-export const GET_ENSURED_APPOINTMENT_LIST_PATH = "/ensureds/{ensuredId}/appointments";
-export const GET_ENSURED_APPOINTMENT_LIST_ROUTE = `GET ${GET_ENSURED_APPOINTMENT_LIST_PATH}`;
+export const INSURED_APPOINTMENT_LIST_PATH = "/insureds/{insuredId}/appointments";
+export const GET_INSURED_APPOINTMENT_LIST_ROUTE = `GET ${INSURED_APPOINTMENT_LIST_PATH}`;
 
 /** Este handler es el encargado de recibir los eventos de la cola de SQS
  * y de las peticiones HTTP para crear y obtener citas médicas.
@@ -38,7 +38,7 @@ export async function handler(
       statusCode: result.statusCode,
       body: JSON.stringify(result.body),
     } satisfies APIGatewayProxyResultV2;
-  } else if (event.routeKey === GET_ENSURED_APPOINTMENT_LIST_ROUTE) {
+  } else if (event.routeKey === GET_INSURED_APPOINTMENT_LIST_ROUTE) {
     const result = await appointmentController.getAppointmentsByInsuredId(
       event.pathParameters?.ensuredId
     );

@@ -1,4 +1,4 @@
-import { handler, CREATE_APPOINTMENT_ROUTE, GET_ENSURED_APPOINTMENT_LIST_ROUTE } from "../handler";
+import { handler, CREATE_APPOINTMENT_ROUTE, GET_INSURED_APPOINTMENT_LIST_ROUTE } from "../handler";
 import { APIGatewayProxyEventV2, SQSEvent } from "aws-lambda";
 import { appointmentController } from "../handler.provider";
 
@@ -81,7 +81,7 @@ describe("appointment.handler", () => {
 
     it("should handle API Gateway event for getting appointments by insured ID", async () => {
         const apiEvent: APIGatewayProxyEventV2 = {
-            routeKey: GET_ENSURED_APPOINTMENT_LIST_ROUTE,
+            routeKey: GET_INSURED_APPOINTMENT_LIST_ROUTE,
             pathParameters: { ensuredId: "456" },
             version: "",
             rawPath: "",

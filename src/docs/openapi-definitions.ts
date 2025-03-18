@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { registerSchema, registry } from './zod-openapi';
 import { appointmentCreateSchema, appointmentCompleteSchema } from '../common/adapters/schemas/appointment';
 import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
-import { CREATE_APPOINTMENT_PATH, GET_ENSURED_APPOINTMENT_LIST_PATH } from '../appointments/handler';
+import { CREATE_APPOINTMENT_PATH, INSURED_APPOINTMENT_LIST_PATH } from '../appointments/handler';
 
 /**
  * Registros de esquemas para la documentación OpenAPI
@@ -108,7 +108,7 @@ registry.registerPath({
  */
 registry.registerPath({
   method: 'get',
-  path: GET_ENSURED_APPOINTMENT_LIST_PATH,
+  path: INSURED_APPOINTMENT_LIST_PATH,
   summary: 'Obtener citas por ID del asegurado',
   description: 'Recuperar todas las citas para una persona asegurada específica',
   tags: ['Citas'],

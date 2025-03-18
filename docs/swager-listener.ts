@@ -7,10 +7,10 @@ export function createRequestListener(): http.RequestListener<typeof http.Incomi
     return (req, res) => {
         const { pathname } = new URL(req.url || '', 'http://localhost');
 
-        if (pathname === '/docs') {
+        if (pathname === '/') {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.write(getSwaggerHtml());
-        } else if (pathname === '/docs/openapi.json') {
+        } else if (pathname === '/openapi.json') {
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.write(JSON.stringify(openApiDocument));
         }

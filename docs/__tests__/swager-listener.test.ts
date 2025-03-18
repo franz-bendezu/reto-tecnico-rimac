@@ -22,7 +22,7 @@ describe('HTTP Server', () => {
     });
 
     it('should return Swagger HTML on /docs', async () => {
-        const response = await fetch('http://localhost:3001/docs');
+        const response = await fetch('http://localhost:3001');
         const text = await response.text();
 
         expect(response.status).toBe(200);
@@ -31,7 +31,7 @@ describe('HTTP Server', () => {
     });
 
     it('should return OpenAPI JSON on /docs/openapi.json', async () => {
-        const response = await fetch('http://localhost:3001/docs/openapi.json');
+        const response = await fetch('http://localhost:3001/openapi.json');
         const json = await response.json();
 
         expect(response.status).toBe(200);

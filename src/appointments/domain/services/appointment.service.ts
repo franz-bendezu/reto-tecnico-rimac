@@ -5,7 +5,7 @@ import { IAppointmentCreate } from "../../../common/domain/interfaces/appointmen
 import { AppointmentStatusType } from "../../../common/domain/models/appointment-status";
 import { BaseAppointment } from "../../../common/domain/models/base-appointment.model";
 import { IAppointmentService } from "./appointment.service.interface";
-import { Appointment } from "../../../common/domain/models/appointment.model";
+import { Appointment } from "../models/appointment.model";
 
 /**
  * Implementación principal del servicio de citas médicas.

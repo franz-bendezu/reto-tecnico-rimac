@@ -1,8 +1,8 @@
-import { IAppointment } from "../interfaces/appointment";
+import { IAppointment } from "../../../common/domain/interfaces/appointment";
 import {
     CountryISO,
-} from "../interfaces/appointment-create";
-import { AppointmentStatusTypes, IAppointmentStatus } from "../interfaces/appointment-status";
+} from "../../../common/domain/interfaces/appointment-create";
+import { AppointmentStatusTypes, IAppointmentStatus } from "../../../common/domain/interfaces/appointment-status";
 
 /**
  * Modelo para la creación de citas médicas.

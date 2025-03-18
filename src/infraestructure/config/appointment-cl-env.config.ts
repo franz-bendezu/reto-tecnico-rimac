@@ -16,6 +16,9 @@ export class AppointmentCLConfigEnv extends AppointmentCountryEnvConfig {
       get dbUserName(): string {
         return process.env.DB_CL_USER_NAME!;
       },
+      get awsRegion(): string {
+        return this.awsRegion;
+      },
     };
   }
 }

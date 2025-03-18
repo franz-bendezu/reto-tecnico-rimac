@@ -16,6 +16,9 @@ export class AppointmentPEConfigEnv extends AppointmentCountryEnvConfig {
       get dbUserName(): string {
         return process.env.DB_PE_USER_NAME!;
       },
+      get awsRegion(): string {
+        return this.awsRegion;
+      },
     };
   }
 }

@@ -3,6 +3,7 @@ export interface IDatabaseConfig {
   get port(): number;
   get dbName(): string;
   get dbUserName(): string;
+  get awsRegion(): string;
 }
 
 export interface IEventBridgeConfig {

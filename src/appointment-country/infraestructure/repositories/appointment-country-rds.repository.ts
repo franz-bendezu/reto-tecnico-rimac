@@ -4,9 +4,9 @@ import mysql from "mysql2/promise";
 import type { Connection } from "mysql2/promise";
 import { IAppointmentCountryRepository } from "./appointment-country.repository.interface";
 import { IDatabaseConfig } from "../config/appointment-country.config.interface";
+import { INSERT_APPOINTMENT_QUERY } from "./querys/appointment-country.query";
 
 // RDS settings
-
 export class AppointmentCountryRDSRepository
   implements IAppointmentCountryRepository {
   token?: string;
@@ -59,7 +59,7 @@ export class AppointmentCountryRDSRepository
    */
   async create(appointment: IBaseAppointment): Promise<void> {
     const conn = await this.dbOps();
-    const sql = `INSERT INTO appointments (insured_id, schedule_id, status, date) VALUES (?, ?, ?, ?)`;
+    const sql = INSERT_APPOINTMENT_QUERY;
     const values = [
       appointment.insuredId,
       appointment.scheduleId,

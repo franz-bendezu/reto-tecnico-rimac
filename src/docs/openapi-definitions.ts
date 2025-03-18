@@ -1,8 +1,9 @@
 import { z } from 'zod';
 import { registerSchema, registry } from './zod-openapi';
-import { appointmentCreateSchema, appointmentCompleteSchema } from '../common/adapters/schemas/appointment';
+import { appointmentCreateSchema, appointmentCompleteSchema, scheduleIdSchema, countryISOSchema } from '../common/adapters/schemas/appointment';
 import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import { CREATE_APPOINTMENT_PATH, INSURED_APPOINTMENT_LIST_PATH } from '../appointments/handler';
+import { insuredIdSchema } from '../common/adapters/schemas/insured';
 
 /**
  * Registros de esquemas para la documentación OpenAPI
@@ -35,10 +36,17 @@ const AppointmentCompleteSchema = registerSchema(
  */
 const AppointmentResponseSchema = registerSchema(
   z.object({
-    insuredId: z.string(),
-    scheduleId: z.number(),
-    countryISO: z.string(),
-    createdAt: z.string().optional(),
+    insuredId: insuredIdSchema,
+    scheduleId: scheduleIdSchema,
+    countryISO: countryISOSchema,
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    statuses: z.array(
+      z.object({
+        status: z.string(),
+        createdAt: z.string(),
+      })
+    ),
   }),
   'AppointmentResponse',
   'Esquema para respuesta de cita'

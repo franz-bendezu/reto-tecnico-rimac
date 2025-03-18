@@ -9,12 +9,14 @@ export const scheduleIdSchema = z.number({
   message: "El id de la cita debe ser un número positivo",
 });
 
+export const countryISOSchema = z.enum(COUNTRIES_ISO, {
+  message: `El país debe ser: ${COUNTRIES_ISO.join(", ")}`,
+});
+
 export const appointmentCreateSchema: z.Schema<IAppointmentCreateSchema> = z.object({
   insuredId: insuredIdSchema,
   scheduleId: scheduleIdSchema,
-  countryISO: z.enum(COUNTRIES_ISO , {
-    message: `El país debe ser: ${COUNTRIES_ISO.join(", ")}`,
-  })
+  countryISO: countryISOSchema,
 });
 
 export const appointmentCompleteSchema: z.Schema<IAppointmentCompleteSchema> = z.object({

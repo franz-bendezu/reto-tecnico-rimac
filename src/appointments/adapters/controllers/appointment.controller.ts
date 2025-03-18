@@ -7,65 +7,24 @@ export class AppointmentController {
     constructor(private readonly appointmentService: IAppointmentService) { }
 
     async createAppointment(data: unknown) {
-        try {
-            const validData = appointmentCreateSchema.parse(data);
-            const result = await this.appointmentService.createAppointment(validData);
-            return {
-                statusCode: 200,
-                body: {
-                    message: "El agendamiento está en proceso",
-                    data: result,
-                },
-            };
-        } catch (error) {
-            return this.handleError(error);
-        }
+        const validData = appointmentCreateSchema.parse(data);
+        const result = await this.appointmentService.createAppointment(validData);
+        
+        return result;
     }
 
     async getAppointmentsByInsuredId(insuredId: unknown) {
-        try {
-            const ensuredId = insuredIdSchema.parse(insuredId);
-            const appointments = await this.appointmentService.getAppointmentsByInsuredId(
-                ensuredId
-            );
-            return {
-                statusCode: 200,
-                body: { appointments },
-            };
-        } catch (error) {
-            return this.handleError(error);
-        }
+        const ensuredId = insuredIdSchema.parse(insuredId);
+        const appointments = await this.appointmentService.getAppointmentsByInsuredId(
+            ensuredId
+        );
+        
+        return appointments;
     }
 
     async completeAppointment(data: unknown) {
-        try {
-            const { insuredId, scheduleId } = appointmentCompleteSchema.parse(data);
-            await this.appointmentService.completeAppointment(insuredId, scheduleId);
-            return {
-                statusCode: 200,
-                body: { message: "Appointment completed" },
-            };
-        } catch (error) {
-            return this.handleError(error);
-        }
-    }
-
-    private handleError(error: unknown) {
-        if (error instanceof z.ZodError) {
-            return {
-                statusCode: 400,
-                body: {
-                    message: error.message,
-                    errors: error.errors.map((e) => e.message),
-                },
-            };
-        } else {
-            console.error("Error in appointment controller:", error);
-            return {
-                statusCode: 500,
-                body: { message: "Internal server error" },
-            };
-        }
+        const { insuredId, scheduleId } = appointmentCompleteSchema.parse(data);
+        await this.appointmentService.completeAppointment(insuredId, scheduleId);
     }
 }
 

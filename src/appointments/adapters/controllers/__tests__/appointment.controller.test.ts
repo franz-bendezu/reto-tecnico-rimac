@@ -19,7 +19,7 @@ describe("AppointmentController", () => {
         appointmentController = new AppointmentController(appointmentService);
     });
 
-    it("should create an appointment and return status 200", async () => {
+    it("should create an appointment and return data", async () => {
         const data: IAppointmentCreateSchema = {
             insuredId: "12345",
             scheduleId: 1,
@@ -42,53 +42,28 @@ describe("AppointmentController", () => {
         const result = await appointmentController.createAppointment(data);
 
         expect(appointmentService.createAppointment).toHaveBeenCalledWith(data);
-        expect(result).toEqual({
-            statusCode: 200,
-            body: { message: "El agendamiento está en proceso", data: saveData },
-        });
+        expect(result).toEqual(saveData);
     });
 
-    it("should return status 400 if data is invalid", async () => {
+    it("should throw error if data is invalid", async () => {
         const data = { /* invalid data */ };
 
-        const result = await appointmentController.createAppointment(data);
-
-        expect(result.statusCode).toBe(400);
-        expect(result.body.message).toBeDefined();
-        if ('errors' in result.body) {
-            expect(result.body.errors).toBeDefined();
-        }
+        await expect(appointmentController.createAppointment(data)).rejects.toThrow();
     });
 
-    it("should return status 500 if an unexpected error occurs", async () => {
+    it("should throw service error if service throws", async () => {
         const data: IAppointmentCreateSchema = {
             insuredId: "12345",
             scheduleId: 1,
             countryISO: "PE"
         };
-        appointmentService.createAppointment.mockRejectedValueOnce(new Error("Unexpected error"));
+        const expectedError = new Error("Unexpected error");
+        appointmentService.createAppointment.mockRejectedValueOnce(expectedError);
 
-        const result = await appointmentController.createAppointment(data);
-
-        expect(result).toEqual({
-            statusCode: 500,
-            body: { message: "Internal server error" },
-        });
+        await expect(appointmentController.createAppointment(data)).rejects.toThrow(expectedError);
     });
 
-    it("should return status 400 if zod validation fails", async () => {
-        const data = { insuredId: "12345", scheduleId: "invalid", countryISO: "PE" };
-
-        const result = await appointmentController.createAppointment(data);
-
-        expect(result.statusCode).toBe(400);
-        expect(result.body.message).toBeDefined();
-        if ('errors' in result.body) {
-            expect(result.body.errors).toBeDefined();
-        }
-    });
-
-    it("should get appointments by insured id and return status 200", async () => {
+    it("should get appointments by insured id and return appointments data", async () => {
         const insuredId = "12345";
         const appointments: IBaseAppointment[] = [{
             insuredId: "12345",
@@ -101,60 +76,35 @@ describe("AppointmentController", () => {
         const result = await appointmentController.getAppointmentsByInsuredId(insuredId);
 
         expect(appointmentService.getAppointmentsByInsuredId).toHaveBeenCalledWith(insuredId);
-        expect(result).toEqual({
-            statusCode: 200,
-            body: { appointments },
-        });
+        expect(result).toEqual(appointments);
     });
 
-    it("should return status 400 if insured id is invalid", async () => {
+    it("should throw error if insured id is invalid", async () => {
         const insuredId = { /* invalid insured id */ };
 
-        const result = await appointmentController.getAppointmentsByInsuredId(insuredId);
-
-        expect(result.statusCode).toBe(400);
-        if ('message' in result.body) {
-            expect(result.body.message).toBeDefined();
-        }
-        if ('errors' in result.body) {
-            expect(result.body.errors).toBeDefined();
-        }
+        await expect(appointmentController.getAppointmentsByInsuredId(insuredId)).rejects.toThrow();
     });
 
-    it("should complete an appointment and return status 200", async () => {
+    it("should complete an appointment", async () => {
         const data: IAppointmentCompleteSchema = { insuredId: "12345", scheduleId: 1 };
         appointmentService.completeAppointment.mockResolvedValueOnce();
 
-        const result = await appointmentController.completeAppointment(data);
+        await appointmentController.completeAppointment(data);
 
         expect(appointmentService.completeAppointment).toHaveBeenCalledWith("12345", 1);
-        expect(result).toEqual({
-            statusCode: 200,
-            body: { message: "Appointment completed" },
-        });
     });
 
-    it("should return status 400 if complete appointment data is invalid", async () => {
+    it("should throw error if complete appointment data is invalid", async () => {
         const data = { insuredId: "12345", scheduleId: "invalid" };
 
-        const result = await appointmentController.completeAppointment(data);
-
-        expect(result.statusCode).toBe(400);
-        expect(result.body.message).toBeDefined();
-        if ('errors' in result.body) {
-            expect(result.body.errors).toBeDefined();
-        }
+        await expect(appointmentController.completeAppointment(data)).rejects.toThrow();
     });
 
-    it("should return status 500 if an unexpected error occurs during complete appointment", async () => {
+    it("should throw service error during complete appointment", async () => {
         const data = { insuredId: "12345", scheduleId: 1 };
-        appointmentService.completeAppointment.mockRejectedValueOnce(new Error("Unexpected error"));
+        const expectedError = new Error("Unexpected error");
+        appointmentService.completeAppointment.mockRejectedValueOnce(expectedError);
 
-        const result = await appointmentController.completeAppointment(data);
-
-        expect(result).toEqual({
-            statusCode: 500,
-            body: { message: "Internal server error" },
-        });
+        await expect(appointmentController.completeAppointment(data)).rejects.toThrow(expectedError);
     });
 });

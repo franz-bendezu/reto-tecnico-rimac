@@ -3,58 +3,44 @@ import { IAppointmentCountryService } from "../../../domain/services/appointment
 import { IAppointmentCreateSchema } from "../../../../common/adapters/interfaces/appointment.interface";
 
 describe("CountryAppointmentController", () => {
-    let controller: CountryAppointmentController;
     let appointmentService: jest.Mocked<IAppointmentCountryService>;
+    let controller: CountryAppointmentController;
 
     beforeEach(() => {
         appointmentService = {
-            createAppointment: jest.fn(),
+            createAppointment: jest.fn()
         };
         controller = new CountryAppointmentController(appointmentService);
     });
 
-    it("should create an appointment successfully", async () => {
-        const validData: IAppointmentCreateSchema = {
+    it("should create an appointment", async () => {
+        const data: IAppointmentCreateSchema = {
             insuredId: "12345",
             scheduleId: 1,
             countryISO: "PE"
         };
-        appointmentService.createAppointment.mockResolvedValueOnce(undefined);
+        appointmentService.createAppointment.mockResolvedValueOnce();
 
-        const result = await controller.createAppointment(validData);
+        await controller.createAppointment(data);
 
-        expect(result).toEqual({
-            statusCode: 200,
-            body: { message: "Appointment created" },
-        });
-        expect(appointmentService.createAppointment).toHaveBeenCalledWith(validData);
+        expect(appointmentService.createAppointment).toHaveBeenCalledWith(data);
     });
 
-    it("should return 400 if data is invalid", async () => {
-        const invalidData = { /* invalid data */ };
-        const result = await controller.createAppointment(invalidData);
+    it("should throw error if data is invalid", async () => {
+        const data = { /* invalid data */ };
 
-        expect(result.statusCode).toBe(400);
-        expect(result.body.message).toBeDefined();
-        if ('errors' in result.body) {
-            expect(result.body.errors).toBeDefined();
-        }
+        await expect(controller.createAppointment(data)).rejects.toThrow();
     });
 
-    it("should return 500 if an unexpected error occurs", async () => {
-        const validData = {
+    it("should throw service error if service throws", async () => {
+        const data: IAppointmentCreateSchema = {
             insuredId: "12345",
             scheduleId: 1,
             countryISO: "PE"
         };
-        const unexpectedError = new Error("Unexpected error");
-        appointmentService.createAppointment.mockRejectedValueOnce(unexpectedError);
+        const expectedError = new Error("Service error");
+        appointmentService.createAppointment.mockRejectedValueOnce(expectedError);
 
-        const result = await controller.createAppointment(validData);
-
-        expect(result).toEqual({
-            statusCode: 500,
-            body: { message: "Internal server error" },
-        });
+        await expect(controller.createAppointment(data)).rejects.toThrow(expectedError);
     });
 });

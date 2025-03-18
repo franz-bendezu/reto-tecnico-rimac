@@ -20,7 +20,7 @@ export class BaseAppointment implements IBaseAppointment {
         public insuredId: string,
         public scheduleId: number,
         public countryISO: CountryISO,
-        public lastStatus: AppointmentStatusType = AppointmentStatusType.PENDING
+        public lastStatus: AppointmentStatusType = AppointmentStatusType.PENDING,
     ) { }
 
     static fromCreate(appointment: IAppointmentCreate): BaseAppointment {

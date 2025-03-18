@@ -99,7 +99,14 @@ provider:
     EVENT_BUS_NAME: "appointment-service"
     EVENT_SOURCE: "appointment.service"
     EVENT_DETAIL_TYPE: "appointmentCompleted"
-
+    DB_CL_PROXY_HOST_NAME: "mock-proxy-host"
+    DB_CL_PORT: "5432"
+    DB_CL_NAME: "mock-db-name"
+    DB_CL_USER_NAME: "mock-db-user"
+    DB_PE_PROXY_HOST_NAME: "mock-proxy-host"
+    DB_PE_PORT: "5432"
+    DB_PE_NAME: "mock-db-name"
+    DB_PE_USER_NAME: "mock-db-user"
   httpApi:
     cors:
       allowedOrigins:

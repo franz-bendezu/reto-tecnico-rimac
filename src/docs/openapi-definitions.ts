@@ -15,7 +15,7 @@ import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 const AppointmentCreateSchema = registerSchema(
   appointmentCreateSchema,
   'AppointmentCreate',
-  'Schema for creating a new appointment'
+  'Esquema para crear una nueva cita'
 );
 
 /**
@@ -25,7 +25,7 @@ const AppointmentCreateSchema = registerSchema(
 const AppointmentCompleteSchema = registerSchema(
   appointmentCompleteSchema,
   'AppointmentComplete',
-  'Schema for completing an appointment'
+  'Esquema para completar una cita'
 );
 
 /**
@@ -40,7 +40,7 @@ const AppointmentResponseSchema = registerSchema(
     createdAt: z.string().optional(),
   }),
   'AppointmentResponse',
-  'Schema for appointment response'
+  'Esquema para respuesta de cita'
 );
 
 /**
@@ -50,7 +50,7 @@ const AppointmentResponseSchema = registerSchema(
 const AppointmentListResponseSchema = registerSchema(
   z.array(AppointmentResponseSchema),
   'AppointmentListResponse',
-  'Schema for appointment list response'
+  'Esquema para respuesta de lista de citas'
 );
 
 /**
@@ -62,7 +62,7 @@ const ErrorResponseSchema = registerSchema(
     message: z.string(),
   }),
   'ErrorResponse',
-  'Schema for error response'
+  'Esquema para respuesta de error'
 );
 
 /**
@@ -77,9 +77,9 @@ const ErrorResponseSchema = registerSchema(
 registry.registerPath({
   method: 'post',
   path: '/appointments',
-  summary: 'Create a new appointment',
-  description: 'Endpoint to create a new appointment for an insured person',
-  tags: ['Appointments'],
+  summary: 'Crear una nueva cita',
+  description: 'Endpoint para crear una nueva cita para una persona asegurada',
+  tags: ['Citas'],
   request: {
     body: {
       content: {
@@ -91,7 +91,7 @@ registry.registerPath({
   },
   responses: {
     200: {
-      description: 'The created appointment',
+      description: 'La cita creada',
       content: {
         'application/json': {
           schema: AppointmentResponseSchema,
@@ -108,9 +108,9 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/insureds/{insuredId}/appointments',
-  summary: 'Get appointments by insured ID',
-  description: 'Retrieve all appointments for a specific insured person',
-  tags: ['Appointments'],
+  summary: 'Obtener citas por ID del asegurado',
+  description: 'Recuperar todas las citas para una persona asegurada específica',
+  tags: ['Citas'],
   request: {
     params: z.object({
       insuredId: z.string(),
@@ -118,7 +118,7 @@ registry.registerPath({
   },
   responses: {
     200: {
-      description: 'List of appointments for the insured person',
+      description: 'Lista de citas para la persona asegurada',
       content: {
         'application/json': {
           schema: AppointmentListResponseSchema,
@@ -134,14 +134,14 @@ registry.registerPath({
  */
 export const openApiDocument = new OpenApiGeneratorV3(registry.definitions).generateDocument({
   info: {
-    title: 'Appointment Service API',
+    title: 'API de Servicio de Citas',
     version: '1.0.0',
-    description: 'API for managing appointments',
+    description: 'API para gestionar citas',
   },
   servers: [
     {
       url: ' https://bbpveee6vb.execute-api.us-east-1.amazonaws.com/dev',
-      description: 'Local development server',
+      description: 'Servidor de desarrollo local',
     },
   ],
   openapi: '3.0.0',

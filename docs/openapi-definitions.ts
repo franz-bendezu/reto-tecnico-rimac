@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { appointmentCreateSchema, appointmentCompleteSchema, scheduleIdSchema, countryISOSchema } from '../common/adapters/schemas/appointment';
+import { appointmentCreateSchema, appointmentCompleteSchema, scheduleIdSchema, countryISOSchema } from '../src/common/adapters/schemas/appointment';
 import { extendZodWithOpenApi, OpenApiGeneratorV3, OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
-import { CREATE_APPOINTMENT_PATH, INSURED_APPOINTMENT_LIST_PATH } from "../appointments/adapters/constants/handler-routes.constant";
-import { insuredIdSchema } from '../common/adapters/schemas/insured';
+import { CREATE_APPOINTMENT_PATH, INSURED_APPOINTMENT_LIST_PATH } from "../src/appointments/adapters/constants/handler-routes.constant";
+import { insuredIdSchema } from '../src/common/adapters/schemas/insured';
 
 /**
  * Registros de esquemas para la documentación OpenAPI

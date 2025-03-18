@@ -7,8 +7,8 @@
     "test": "jest --coverage",
     "local": "serverless dev",
     "deploy": "serverless deploy",
-    "build:openapi": "npx ts-node ./src/docs/script.ts",
-    "swagger": "npx ts-node ./src/docs/server.ts"
+    "build:openapi": "npx ts-node ./docs/script.ts",
+    "swagger": "npx ts-node ./docs/server.ts"
   },
   "author": "",
   "license": "ISC",

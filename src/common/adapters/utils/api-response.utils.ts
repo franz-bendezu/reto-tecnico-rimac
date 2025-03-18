@@ -1,12 +1,13 @@
 import { APIGatewayProxyStructuredResultV2 } from "aws-lambda";
 import { z } from "zod";
+import { ResponseMessage, StatusCode } from "../constants/api-response.constants";
 
 /**
  * Generates a standardized success response
  */
 export const createSuccessResponse = (
   data: any,
-  statusCode: number = 200
+  statusCode: number = StatusCode.OK
 ): APIGatewayProxyStructuredResultV2 => {
   return {
     statusCode,
@@ -18,11 +19,11 @@ export const createSuccessResponse = (
  * Generates a standardized bad request response
  */
 export const createBadRequestResponse = (
-  message: string,
+  message: string = ResponseMessage.BAD_REQUEST,
   errors?: string[]
 ): APIGatewayProxyStructuredResultV2 => {
   return {
-    statusCode: 400,
+    statusCode: StatusCode.BAD_REQUEST,
     body: JSON.stringify({
       message,
       errors,
@@ -46,9 +47,9 @@ export const createErrorResponse = (
   console.error("Error:", error);
 
   return {
-    statusCode: 500,
+    statusCode: StatusCode.INTERNAL_SERVER_ERROR,
     body: JSON.stringify({
-      message: "Internal server error",
+      message: ResponseMessage.INTERNAL_SERVER_ERROR,
     }),
   };
 };

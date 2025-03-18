@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createSuccessResponse, createBadRequestResponse, createErrorResponse, apiHandler } from "../api-response.utils";
+import { ResponseMessage } from "../../constants/api-response.constants";
 
 describe("API Response Utilities", () => {
   describe("createSuccessResponse", () => {
@@ -25,6 +26,20 @@ describe("API Response Utilities", () => {
   });
 
   describe("createBadRequestResponse", () => {
+
+    it("should create a bad request ", () => {
+      const response = createBadRequestResponse();
+      
+      expect(response).toEqual({
+        statusCode: 400,
+        body: JSON.stringify({
+          message: ResponseMessage.BAD_REQUEST,
+          errors: undefined
+        })
+      });
+    });
+
+
     it("should create a bad request response without errors", () => {
       const message = "Invalid data";
       const response = createBadRequestResponse(message);

@@ -138,4 +138,54 @@ describe("AppointmentDynamoDBRepository", () => {
         });
         expect(docClient.send).toHaveBeenCalledWith(expect.any(PutCommand));
     });
+
+    it('should retrieve an appointment detail successfully', async () => {
+        const mockItem: IAppointment = {
+            insuredId: "123",
+            scheduleId: 1,
+            lastStatus: "pending",
+            statuses: [{
+                status: "pending",
+                createdAt: "2023-01-01"
+            }],
+            createdAt: "2023-01-01",
+            updatedAt: "2023-01-01",
+            countryISO: "PE"
+        };
+
+        docClient.send.mockImplementationOnce(
+            (): GetCommandOutput => ({
+                Item: mockItem,
+                $metadata: {
+                    requestId: "123",
+                },
+            })
+        );
+
+        const result = await repository.getAppointmentDetail("123", 1);
+
+        expect(docClient.send).toHaveBeenCalledWith(
+            expect.any(GetCommand)
+        );
+        expect(result).toEqual(mockItem);
+    });
+
+    it('should return null when appointment is not found', async () => {
+        docClient.send.mockImplementationOnce(
+            (): GetCommandOutput => ({
+                $metadata: {
+                    requestId: "123",
+                },
+            })
+        );
+
+        const result = await repository.getAppointmentDetail("123", 1);
+
+        expect(docClient.send).toHaveBeenCalledWith(
+            expect.any(GetCommand) 
+        );
+        expect(result).toBeUndefined();
+    });
 });
+
+

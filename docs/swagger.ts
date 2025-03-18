@@ -18,6 +18,7 @@ export function getSwaggerHtml() {
           url: "/openapi.json",
           dom_id: '#swagger-ui',
           deepLinking: true,
+          queryConfigEnabled: true,
           presets: [
             SwaggerUIBundle.presets.apis,
             SwaggerUIBundle.SwaggerUIStandalonePreset

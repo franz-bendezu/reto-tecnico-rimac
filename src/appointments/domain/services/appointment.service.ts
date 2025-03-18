@@ -1,0 +1,56 @@
+import { IAppointmentCountryProducer } from "../../../appointment-country/infraestructure/messasing/appointment-country.producer.interface";
+import { IAppointmentRepository } from "../../infraestructure/repositories/appointment.repository.interface";
+import { IBaseAppointment } from "../../../common/domain/interfaces/appointment";
+import { IAppointmentCreate } from "../../../common/domain/interfaces/appointment-create";
+import { AppointmentStatusType } from "../../../common/domain/models/appointment-status";
+import { IAppointmentService } from "./appointment.service.interface";
+
+export class AppointmentService implements IAppointmentService {
+  constructor(
+    private appointmentRepository: IAppointmentRepository,
+    private appointmentCountryProducer: IAppointmentCountryProducer
+  ) { }
+
+  async createAppointment(newAppointment: IAppointmentCreate): Promise<void> {
+    const appointment: IBaseAppointment = {
+      insuredId: newAppointment.insuredId,
+      scheduleId: newAppointment.scheduleId,
+      countryISO: newAppointment.countryISO,
+      lastStatus: AppointmentStatusType.PENDING,
+    };
+    await this.appointmentRepository.create(appointment);
+    await this.appointmentCountryProducer.sendAppointment(newAppointment);
+  }
+
+  async getAppointmentsByInsuredId(
+    insuredId: string
+  ): Promise<IBaseAppointment[]> {
+    return this.appointmentRepository.getAllByEnsuranceId(insuredId);
+  }
+
+  async completeAppointment(
+    insuredId: string,
+    scheduleId: number
+  ): Promise<void> {
+    const item = await this.appointmentRepository.getAppointmentDetail(insuredId, scheduleId);
+    if (!item) {
+      throw new Error("Appointment not found");
+    }
+    const existingStatuses = item.statuses;
+    const status = AppointmentStatusType.COMPLETED;
+    await this.appointmentRepository.updateAppointment(
+      {
+        ...item,
+        lastStatus: status,
+        updatedAt: new Date().toISOString(),
+        statuses: [
+          ...existingStatuses,
+          {
+            status,
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      }
+    );
+  }
+}

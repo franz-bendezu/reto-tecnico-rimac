@@ -5,7 +5,7 @@ import type {
   SQSEvent,
 } from "aws-lambda";
 import { appointmentController } from "./handler.provider";
-import { CREATE_APPOINTMENT_ROUTE, GET_INSURED_APPOINTMENT_LIST_ROUTE } from "./adapters/constants/handler-routes.constant";
+import { CREATE_APPOINTMENT_ROUTE, GET_INSURED_APPOINTMENT_LIST_ROUTE, INSURED_ID_PARAM } from "./adapters/constants/handler-routes.constant";
 import { createBadRequestResponse, createErrorResponse, createSuccessResponse } from "../common/adapters/utils/api-response.utils";
 
 /** Este handler es el encargado de recibir los eventos de la cola de SQS
@@ -41,7 +41,7 @@ export async function handler(
       );
     } else if (event.routeKey === GET_INSURED_APPOINTMENT_LIST_ROUTE) {
       const appointments = await appointmentController.getAppointmentsByInsuredId(
-        event.pathParameters?.insuredId
+        event.pathParameters?.[INSURED_ID_PARAM]
       );
       return createSuccessResponse({ appointments });
     } else {

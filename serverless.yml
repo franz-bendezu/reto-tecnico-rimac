@@ -215,3 +215,13 @@ functions:
             Fn::GetAtt:
               - sqsCL
               - Arn
+
+  docs:
+    handler: src/adapters/handlers/docs.handler.handler
+    events:
+      - httpApi:
+          path: /docs
+          method: get
+      - httpApi:
+          path: /docs/openapi.json
+          method: get

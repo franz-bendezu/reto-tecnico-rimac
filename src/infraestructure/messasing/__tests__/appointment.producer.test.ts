@@ -1,6 +1,6 @@
-import { AppointmentProducer } from "./appointment.producer";
-import { IAppointmentCreate } from "../../domain/interfaces/appointment-create";
-import { IAppointmentCountryConfig } from "../config/appointment-country.config.interface";
+import { AppointmentProducer } from "../appointment.producer";
+import { IAppointmentCreate } from "../../../domain/interfaces/appointment-create";
+import { IAppointmentCountryConfig } from "../../config/appointment-country.config.interface";
 import { PutEventsCommand } from "@aws-sdk/client-eventbridge";
 
 describe("AppointmentProducer", () => {

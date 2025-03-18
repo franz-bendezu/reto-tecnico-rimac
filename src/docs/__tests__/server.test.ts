@@ -1,6 +1,6 @@
 import http from "http";
 import { jest } from "@jest/globals";
-import './server'
+import '../server'
 
 jest.mock("http" , () => {
     return {

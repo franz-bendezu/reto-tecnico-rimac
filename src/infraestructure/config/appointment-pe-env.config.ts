@@ -3,6 +3,7 @@ import { IDatabaseConfig } from "./appointment-country.config.interface";
 
 export class AppointmentPEConfigEnv extends AppointmentCountryEnvConfig {
   get rdsDatabase(): IDatabaseConfig {
+    const awsRegion = super.awsRegion;
     return {
       get proxyHostName(): string {
         return process.env.DB_PE_PROXY_HOST_NAME!;
@@ -17,7 +18,7 @@ export class AppointmentPEConfigEnv extends AppointmentCountryEnvConfig {
         return process.env.DB_PE_USER_NAME!;
       },
       get awsRegion(): string {
-        return this.awsRegion;
+        return awsRegion;
       },
     };
   }

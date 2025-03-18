@@ -1,4 +1,4 @@
-import { IAppointment } from "../../../common/domain/interfaces/appointment";
+import { IAppointment } from "../interfaces/appointment";
 import {
     CountryISO,
 } from "../../../common/domain/interfaces/appointment-create";

@@ -1,4 +1,4 @@
-import { IBaseAppointment } from "../interfaces/appointment";
+import { IBaseAppointment } from "../interfaces/base-appointment.interface";
 import {
     CountryISO,
     IAppointmentCreate,

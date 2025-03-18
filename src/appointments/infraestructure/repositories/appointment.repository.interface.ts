@@ -1,4 +1,5 @@
-import { IAppointment, IBaseAppointment } from "../../../common/domain/interfaces/appointment";
+import { IAppointment } from "../../domain/interfaces/appointment";
+import { IBaseAppointment } from "../../../common/domain/interfaces/base-appointment.interface";
 
 export interface IAppointmentRepository {
   create(appointment: IBaseAppointment): Promise<IAppointment>;

@@ -1,6 +1,7 @@
 import { AppointmentController } from "../appointment.controller";
 import { IAppointmentCreateSchema, IAppointmentCompleteSchema } from "../../../../common/adapters/interfaces/appointment.interface";
-import { IAppointment, IBaseAppointment } from "../../../../common/domain/interfaces/appointment";
+import { IAppointment } from "../../../domain/interfaces/appointment";
+import { IBaseAppointment } from "../../../../common/domain/interfaces/base-appointment.interface";
 import { IAppointmentService } from "../../../domain/services/appointment.service.interface";
 
 

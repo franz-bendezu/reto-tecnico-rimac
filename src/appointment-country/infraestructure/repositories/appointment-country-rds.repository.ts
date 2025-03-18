@@ -1,4 +1,4 @@
-import { IBaseAppointment } from "../../../common/domain/interfaces/appointment";
+import { IBaseAppointment } from "../../../common/domain/interfaces/base-appointment.interface";
 import { Signer } from "@aws-sdk/rds-signer";
 import mysql from "mysql2/promise";
 import type { Connection } from "mysql2/promise";

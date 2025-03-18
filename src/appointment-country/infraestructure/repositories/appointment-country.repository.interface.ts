@@ -1,4 +1,4 @@
-import { IBaseAppointment } from "../../../common/domain/interfaces/appointment";
+import { IBaseAppointment } from "../../../common/domain/interfaces/base-appointment.interface";
 
 /**
  * Repositorio de citas por país.

@@ -13,8 +13,8 @@ import {
 } from "../appointment-dynamoDB.repository";
 import {
     IAppointment,
-    IBaseAppointment,
-} from "../../../../common/domain/interfaces/appointment";
+} from "../../../domain/interfaces/appointment";
+import { IBaseAppointment } from "../../../../common/domain/interfaces/base-appointment.interface";
 import { IAppointmentConfig } from "../../config/appointment.config.interface";
 
 jest.mock("@aws-sdk/lib-dynamodb", () => ({

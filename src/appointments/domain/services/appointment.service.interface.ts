@@ -1,4 +1,5 @@
-import { IAppointment, IBaseAppointment } from "../../../common/domain/interfaces/appointment";
+import { IAppointment } from "../interfaces/appointment";
+import { IBaseAppointment } from "../../../common/domain/interfaces/base-appointment.interface";
 import { IAppointmentCreate } from "../../../common/domain/interfaces/appointment-create";
 
 /**

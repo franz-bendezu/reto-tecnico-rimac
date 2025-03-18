@@ -3,7 +3,7 @@ import { IAppointmentRepository } from "../../../infraestructure/repositories/ap
 import { IAppointmentCountryProducer } from "../../../infraestructure/messasing/appointment-country.producer.interface";
 import { IAppointmentCreate } from "../../../../common/domain/interfaces/appointment-create";
 import { AppointmentStatusType } from "../../../../common/domain/models/appointment-status";
-import { IBaseAppointment } from "../../../../common/domain/interfaces/appointment";
+import { IBaseAppointment } from "../../../../common/domain/interfaces/base-appointment.interface";
 
 describe("AppointmentService", () => {
     let appointmentService: AppointmentService;

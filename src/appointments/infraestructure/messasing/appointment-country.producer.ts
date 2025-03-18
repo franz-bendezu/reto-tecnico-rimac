@@ -5,7 +5,7 @@ import {
 } from "@aws-sdk/client-sns";
 import { IAppointmentCountryProducer } from "./appointment-country.producer.interface";
 import { IAppointmentCreate } from "../../../common/domain/interfaces/appointment-create";
-import { IAppointmentConfig } from "../../../appointments/infraestructure/config/appointment.config.interface";
+import { IAppointmentConfig } from "../config/appointment.config.interface";
 
 /**
  * Tipo que define los métodos necesarios del cliente SNS para el productor de citas por país.

@@ -1,6 +1,6 @@
 import { AppointmentCountryProducer, SNSClientAppointment } from "../appointment-country.producer";
 import { IAppointmentCreate } from "../../../../common/domain/interfaces/appointment-create";
-import { IAppointmentConfig } from "../../../../appointments/infraestructure/config/appointment.config.interface";
+import { IAppointmentConfig } from "../../config/appointment.config.interface";
 import { PublishCommand } from "@aws-sdk/client-sns";
 
 jest.mock("@aws-sdk/client-sns");

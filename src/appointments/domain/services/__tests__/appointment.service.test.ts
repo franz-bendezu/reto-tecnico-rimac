@@ -1,6 +1,6 @@
 import { AppointmentService } from "../appointment.service";
 import { IAppointmentRepository } from "../../../infraestructure/repositories/appointment.repository.interface";
-import { IAppointmentCountryProducer } from "../../../../appointment-country/infraestructure/messasing/appointment-country.producer.interface";
+import { IAppointmentCountryProducer } from "../../../infraestructure/messasing/appointment-country.producer.interface";
 import { IAppointmentCreate } from "../../../../common/domain/interfaces/appointment-create";
 import { AppointmentStatusType } from "../../../../common/domain/models/appointment-status";
 

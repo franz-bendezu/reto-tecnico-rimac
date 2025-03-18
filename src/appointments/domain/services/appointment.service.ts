@@ -1,4 +1,4 @@
-import { IAppointmentCountryProducer } from "../../../appointment-country/infraestructure/messasing/appointment-country.producer.interface";
+import { IAppointmentCountryProducer } from "../../infraestructure/messasing/appointment-country.producer.interface";
 import { IAppointmentRepository } from "../../infraestructure/repositories/appointment.repository.interface";
 import { IAppointment, IBaseAppointment } from "../../../common/domain/interfaces/appointment";
 import { IAppointmentCreate } from "../../../common/domain/interfaces/appointment-create";

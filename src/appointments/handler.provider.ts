@@ -3,7 +3,7 @@ import { SNSClient } from "@aws-sdk/client-sns";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { AppointmentService } from "./domain/services/appointment.service";
 import { AppointmentConfigEnv } from "./infraestructure/config/appointment-env.config";
-import { AppointmentCountryProducer } from "../appointment-country/infraestructure/messasing/appointment-country.producer";
+import { AppointmentCountryProducer } from "./infraestructure/messasing/appointment-country.producer";
 import { AppointmentDynamoDBRepository } from "./infraestructure/repositories/appointment-dynamoDB.repository";
 import { AppointmentController } from "./adapters/controllers/appointment.controller";
 

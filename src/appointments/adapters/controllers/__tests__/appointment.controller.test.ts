@@ -102,7 +102,7 @@ describe("AppointmentController", () => {
         expect(appointmentService.getAppointmentsByInsuredId).toHaveBeenCalledWith(insuredId);
         expect(result).toEqual({
             statusCode: 200,
-            body: appointments,
+            body: { appointments },
         });
     });
 

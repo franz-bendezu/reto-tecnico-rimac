@@ -3,21 +3,23 @@ import {
   IDatabaseConfig,
   IEventBridgeConfig,
 } from "./appointment-country.config.interface";
+import { getRequiredEnv } from "./utils/env-validator";
 
 export abstract class AppointmentCountryEnvConfig implements IAppointmentCountryConfig {
   get awsRegion(): string {
-    return process.env.AWS_REGION!;
+    return getRequiredEnv('AWS_REGION');
   }
+  
   get eventBridge(): IEventBridgeConfig {
     return {
       get busName(): string {
-        return process.env.EVENT_BUS_NAME!;
+        return getRequiredEnv('EVENT_BUS_NAME');
       },
       get source(): string {
-        return process.env.EVENT_SOURCE!;
+        return getRequiredEnv('EVENT_SOURCE');
       },
       get detailType(): string {
-        return process.env.EVENT_DETAIL_TYPE!;
+        return getRequiredEnv('EVENT_DETAIL_TYPE');
       },
     };
   }

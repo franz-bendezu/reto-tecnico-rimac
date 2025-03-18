@@ -15,7 +15,7 @@ export class AppointmentDynamoDBRepository implements IAppointmentRepository {
 
   constructor(private docClient: AppointmentDynamoClient, private config: IAppointmentConfig) { }
 
-  async create(appointment: IBaseAppointment): Promise<void> {
+  async create(appointment: IBaseAppointment): Promise<IAppointment> {
     const result: IAppointment = {
       ...appointment,
       createdAt: new Date().toISOString(),

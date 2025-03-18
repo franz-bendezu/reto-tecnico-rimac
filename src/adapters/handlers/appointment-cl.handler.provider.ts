@@ -11,7 +11,7 @@ const appointmentProducer = new AppointmentProducer(
   config
 );
 const appointmentCountryRepository = new AppointmentCountryRDSRepository(
-  config
+  config.rdsDatabase
 );
 export const appointmentService = new AppointmentCLService(
   appointmentCountryRepository,

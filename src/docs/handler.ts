@@ -1,5 +1,6 @@
 import type { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { openApiDocument } from './openapi-definitions';
+import { getSwaggerHtml } from './swagger';
 
 export const handler = async (
   event: APIGatewayProxyEventV2
@@ -30,34 +31,3 @@ export const handler = async (
     body: JSON.stringify({ message: 'Not found' }),
   };
 };
-
-// Function to generate the HTML for Swagger UI
-function getSwaggerHtml() {
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Swagger UI</title>
-  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.20.1/swagger-ui.css">
-</head>
-<body>
-  <div id="swagger-ui"></div>
-  <script src="https://unpkg.com/swagger-ui-dist@5.20.1/swagger-ui-bundle.js"></script>
-  <script>
-    window.onload = function() {
-      window.ui = SwaggerUIBundle({
-        url: "/docs/openapi.json",
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIBundle.SwaggerUIStandalonePreset
-        ],
-      });
-    };
-  </script>
-</body>
-</html>
-  `;
-}

@@ -46,11 +46,10 @@ https://xxxxxx.execute-api.us-east-1.amazonaws.com/dev
 {
     "appointments": [
         {
-            "id": "uuid-123",
             "insuredId": "12345",
             "scheduleId": 123,
             "countryISO": "PE",
-            "status": "pending",
+            "lasStatus": "pending",
             "createdAt": "2024-03-18T10:00:00Z"
         }
     ]

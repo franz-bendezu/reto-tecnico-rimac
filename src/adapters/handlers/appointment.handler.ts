@@ -25,18 +25,11 @@ export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (
     } satisfies APIGatewayProxyResultV2
 
   } else if (event.routeKey === GET_ENSURED_APPOINTMENT_LIST) {
-    try {
-      const result = await appointmentController.getAppointmentsByInsuredId(event.pathParameters?.ensuredId);
-      return {
-        statusCode: result.statusCode,
-        body: JSON.stringify(result.body),
-      };
-    } catch (error) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: "Invalid insured ID" }),
-      } satisfies APIGatewayProxyResultV2;
-    }
+    const result = await appointmentController.getAppointmentsByInsuredId(event.pathParameters?.ensuredId);
+    return {
+      statusCode: result.statusCode,
+      body: JSON.stringify(result.body),
+    };
   }
 
   return {

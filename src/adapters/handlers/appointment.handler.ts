@@ -1,9 +1,8 @@
 import type {
   APIGatewayProxyEventV2,
-  APIGatewayProxyHandlerV2,
   APIGatewayProxyResultV2,
+  SQSBatchResponse,
   SQSEvent,
-  SQSHandler,
 } from "aws-lambda";
 import { appointmentController } from "./appointment.handler.provider";
 
@@ -11,9 +10,13 @@ export const CREATE_APPOINTMENT_ROUTE = "POST /appointments";
 export const GET_ENSURED_APPOINTMENT_LIST =
   "GET /ensureds/{ensuredId}/appointments";
 
-export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (
+export function handler(
+  event: APIGatewayProxyEventV2
+): Promise<APIGatewayProxyResultV2>;
+export function handler(event: SQSEvent): Promise<void | SQSBatchResponse>;
+export async function handler(
   event: SQSEvent | APIGatewayProxyEventV2
-) => {
+): Promise<void | APIGatewayProxyResultV2 | SQSBatchResponse> {
   if ("Records" in event) {
     for (const record of event.Records) {
       await appointmentController.completeAppointment(JSON.parse(record.body));
@@ -40,4 +43,4 @@ export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (
     statusCode: 400,
     body: JSON.stringify({ message: "Bad request" }),
   } satisfies APIGatewayProxyResultV2;
-};
+}

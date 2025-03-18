@@ -1,6 +1,7 @@
 import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyHandlerV2,
+  APIGatewayProxyResultV2,
   SQSEvent,
   SQSHandler,
 } from "aws-lambda";
@@ -21,7 +22,7 @@ export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (
     return {
       statusCode: result.statusCode,
       body: JSON.stringify(result.body),
-    };
+    } satisfies APIGatewayProxyResultV2
 
   } else if (event.routeKey === GET_ENSURED_APPOINTMENT_LIST) {
     try {
@@ -34,12 +35,12 @@ export const handler: APIGatewayProxyHandlerV2 | SQSHandler = async (
       return {
         statusCode: 400,
         body: JSON.stringify({ message: "Invalid insured ID" }),
-      };
+      } satisfies APIGatewayProxyResultV2;
     }
   }
 
   return {
     statusCode: 400,
     body: JSON.stringify({ message: "Bad request" }),
-  };
+  } satisfies APIGatewayProxyResultV2;
 };

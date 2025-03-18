@@ -2,8 +2,9 @@ import { IAppointmentProducer } from "../../infraestructure/messasing/appointmen
 import { IAppointmentCountryRepository } from "../../infraestructure/repositories/appointment-country.repository.interface";
 import { IAppointmentCreate } from "../interfaces/appointment-create";
 import { AppointmentStatusType } from "../models/appointment-status";
+import { IAppointmentCountryService } from "./appointment-country.service.interface";
 
-export abstract class AppointmentCountryService {
+export abstract class AppointmentCountryService implements IAppointmentCountryService {
   constructor(
     private appointmentCountryRepository: IAppointmentCountryRepository,
     private appointmentCountryProducer: IAppointmentProducer

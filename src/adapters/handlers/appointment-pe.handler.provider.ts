@@ -3,6 +3,7 @@ import { AppointmentPEService } from "../../domain/services/appointment-pe.servi
 import { AppointmentPEConfigEnv } from "../../infraestructure/config/appointment-pe-env.config";
 import { AppointmentProducer } from "../../infraestructure/messasing/appointment.producer";
 import { AppointmentCountryRDSRepository } from "../../infraestructure/repositories/appointment-country-rds.repository";
+import { CountryAppointmentController } from "../controllers/appointment-country.controller";
 
 const config = new AppointmentPEConfigEnv();
 const appointmentProducer = new AppointmentProducer(
@@ -16,3 +17,4 @@ export const appointmentService = new AppointmentPEService(
   appointmentCountryRepository,
   appointmentProducer
 );
+export const appointmentCountryController = new CountryAppointmentController(appointmentService);

@@ -16,22 +16,24 @@ export class AppointmentDynamoDBRepository implements IAppointmentRepository {
   constructor(private docClient: AppointmentDynamoClient, private config: IAppointmentConfig) { }
 
   async create(appointment: IBaseAppointment): Promise<void> {
+    const result: IAppointment = {
+      ...appointment,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      statuses: [
+        {
+          status: appointment.lastStatus,
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    }
     await this.docClient.send(
       new PutCommand({
         TableName: this.config.dynamoDBTableName,
-        Item: {
-          ...appointment,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          statuses: [
-            {
-              status: appointment.lastStatus,
-              date: new Date().toISOString(),
-            },
-          ],
-        },
+        Item: result,
       })
     );
+    return result;
   }
 
   async getAllByEnsuranceId(insuredId: string): Promise<IAppointment[]> {

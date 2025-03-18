@@ -1,7 +1,7 @@
 import { IAppointment, IBaseAppointment } from "../../../common/domain/interfaces/appointment";
 
 export interface IAppointmentRepository {
-  create(appointment: IBaseAppointment): Promise<void>;
+  create(appointment: IBaseAppointment): Promise<IAppointment>;
 
   getAllByEnsuranceId(insuredId: string): Promise<IBaseAppointment[]>;
 

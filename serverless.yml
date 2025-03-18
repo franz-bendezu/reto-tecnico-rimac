@@ -111,8 +111,6 @@ provider:
         - GET
         - POST
         - OPTIONS
-      exposeHeaders:
-        - Access-Control-Allow-Origin
       maxAge: 6000 # In seconds
   
 resources:
@@ -158,10 +156,10 @@ resources:
             - Arn
         TopicArn:
           Ref: sns
+        FilterPolicyScope: MessageAttributes
         FilterPolicy:
           countryISO:
             - "PE" # Filtra mensajes cuyo countryISO es "PE"
-        RawMessageDelivery: true
 
     SNSQueuePolicyCL:
       Type: AWS::SNS::Subscription
@@ -173,10 +171,10 @@ resources:
             - Arn
         TopicArn:
           Ref: sns
+        FilterPolicyScope: MessageAttributes
         FilterPolicy:
           countryISO:
             - "CL" # Filtra mensajes cuyo countryISO es "CL"
-        RawMessageDelivery: true
 
     sqs:
       Type: AWS::SQS::Queue
@@ -203,11 +201,9 @@ functions:
     handler: src/appointments/handler.handler
     events:
       - httpApi:
-          integration: lambda
           path: /appointments
           method: post
       - httpApi:
-          integration: lambda
           path: /insureds/{insuredId}/appointments
           method: get
       - sqs:
@@ -215,7 +211,7 @@ functions:
             Fn::GetAtt:
               - sqs
               - Arn
-  appointment_cl:
+  appointment_pe:
     handler: src/appointment-country/handler-pe.handler
     events:
       - sqs:
@@ -223,7 +219,7 @@ functions:
             Fn::GetAtt:
               - sqsPE
               - Arn
-  appointment_pe:
+  appointment_cl:
     handler: src/appointment-country/handler-cl.handler
     events:
       - sqs:

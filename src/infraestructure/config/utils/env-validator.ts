@@ -1,8 +1,8 @@
 /**
- * Gets an environment variable value or throws an error if it's not defined
- * @param key The environment variable name
- * @param errorMessage Custom error message (optional)
- * @returns The environment variable value
+ * Obtiene el valor de una variable de entorno o lanza un error si no está definida
+ * @param key El nombre de la variable de entorno
+ * @param errorMessage Mensaje de error personalizado (opcional)
+ * @returns El valor de la variable de entorno
  */
 export function getRequiredEnv(key: string, errorMessage?: string): string {
   const value = process.env[key];
@@ -13,10 +13,10 @@ export function getRequiredEnv(key: string, errorMessage?: string): string {
 }
 
 /**
- * Gets a numeric environment variable or throws an error if it's not valid
- * @param key The environment variable name
- * @param errorMessage Custom error message (optional)
- * @returns The parsed numeric value
+ * Obtiene una variable de entorno numérica o lanza un error si no es válida
+ * @param key El nombre de la variable de entorno
+ * @param errorMessage Mensaje de error personalizado (opcional)
+ * @returns El valor numérico parseado
  */
 export function getRequiredNumericEnv(key: string, errorMessage?: string): number {
   const value = getRequiredEnv(key, errorMessage);

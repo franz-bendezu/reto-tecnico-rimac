@@ -132,7 +132,45 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    SQSQueuePolicyPE:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        Queues:
+          - Ref: sqsPE
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: "AllowSNSToSendMessageToSQS"
+              Effect: Allow
+              Principal:
+                Service: "sns.amazonaws.com"
+              Action: "sqs:SendMessage"
+              Resource: 
+                Fn::GetAtt: [sqsPE, Arn]
+              Condition:
+                ArnEquals:
+                  "aws:SourceArn": 
+                    Ref: sns
 
+    SQSQueuePolicyCL:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        Queues:
+          - Ref: sqsCL
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: "AllowSNSToSendMessageToSQS"
+              Effect: Allow
+              Principal:
+                Service: "sns.amazonaws.com"
+              Action: "sqs:SendMessage"
+              Resource: 
+                Fn::GetAtt: [sqsCL, Arn]
+              Condition:
+                ArnEquals:
+                  "aws:SourceArn": 
+                    Ref: sns
     sns:
       Type: AWS::SNS::Topic
       Properties:

@@ -1,6 +1,7 @@
 import { SQSHandler } from "aws-lambda";
 import { handler } from "../handler-pe";
 import { appointmentCountryController } from "../handler-pe.provider";
+import { IAppointmentCreate } from "../../common/domain/interfaces/appointment-create";
 
 jest.mock("../handler-pe.provider");
 
@@ -28,17 +29,32 @@ describe("appointment-pe.handler", () => {
     });
 
     it("should handle multiple records", async () => {
+        const items: IAppointmentCreate[] = [
+            { insuredId: "123", scheduleId: 1, countryISO: "PE" },
+            { insuredId: "456", scheduleId: 2, countryISO: "PE" },
+        ];
         const multipleRecordsEvent = {
-            Records: [
-                { body: JSON.stringify({ id: 1, name: "Test Appointment 1" }) },
-                { body: JSON.stringify({ id: 2, name: "Test Appointment 2" }) },
-            ],
+            Records: items.map((item) => ({
+                body: JSON.stringify(item),
+            })),
         };
 
-        await handler(multipleRecordsEvent as any,  {} as any, {} as any);
+        await handler(multipleRecordsEvent as any, {} as any, {} as any);
 
-        expect(mockCreateAppointment).toHaveBeenCalledWith({ id: 1, name: "Test Appointment 1" });
-        expect(mockCreateAppointment).toHaveBeenCalledWith({ id: 2, name: "Test Appointment 2" });
+        expect(mockCreateAppointment).toHaveBeenCalledWith(
+            expect.objectContaining({
+                insuredId: "123",
+                scheduleId: 1,
+                countryISO: "PE",
+            })
+        );
+        expect(mockCreateAppointment).toHaveBeenCalledWith(
+            expect.objectContaining({
+                insuredId: "456",
+                scheduleId: 2,
+                countryISO: "PE",
+            })
+        );
         expect(mockCreateAppointment).toHaveBeenCalledTimes(2);
     });
 });

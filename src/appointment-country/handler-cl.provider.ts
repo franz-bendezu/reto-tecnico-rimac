@@ -9,7 +9,6 @@ import { AppointmentCountryMemoryRepository } from "./infraestructure/repositori
 // Aquí se usa el patrón de diseño `Inyección de Dependencias` 
 // para proveer los servicios necesarios para el controlador de citas en Chile
 
-console.log("env", process.env);
 const config = new AppointmentCLConfigEnv();
 const appointmentProducer = new AppointmentProducer(
   new EventBridgeClient({}),

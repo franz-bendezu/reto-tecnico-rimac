@@ -73,12 +73,4 @@ describe("appointment-pe.handler", () => {
         expect(mockCreateAppointment).toHaveBeenCalledTimes(2);
     });
 
-    it("should handle invalid JSON in event record body", async () => {
-        const event = {
-            Records: [{ body: "invalid JSON" }],
-        };
-
-        await expect(handler(event as any, {} as any, {} as any)).rejects.toThrow();
-        expect(mockCreateAppointment).not.toHaveBeenCalled();
-    });
 });

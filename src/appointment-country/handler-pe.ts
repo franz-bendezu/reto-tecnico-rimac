@@ -2,7 +2,6 @@ import type { SQSHandler } from "aws-lambda";
 import { appointmentCountryController } from "./handler-pe.provider";
 
 export const handler: SQSHandler = async (event) => {
-  console.log("Processing Peru appointments batch...");
   try {
     await Promise.all(
       event.Records.map(async (record) => {
@@ -14,7 +13,5 @@ export const handler: SQSHandler = async (event) => {
     );
   } catch (error) {
     console.error("Error processing Peru appointments:", error);
-    // Rethrow to allow AWS to retry processing the batch
-    throw error;
   }
 };

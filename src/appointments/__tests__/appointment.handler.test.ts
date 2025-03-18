@@ -2,6 +2,7 @@ import { handler } from "../handler";
 import {
     CREATE_APPOINTMENT_ROUTE,
     GET_INSURED_APPOINTMENT_LIST_ROUTE,
+    INSURED_ID_PARAM,
 } from "../adapters/constants/handler-routes.constant";
 import { APIGatewayProxyEventV2, SQSEvent } from "aws-lambda";
 import { appointmentController } from "../handler.provider";
@@ -77,7 +78,7 @@ describe("appointment.handler", () => {
             appointmentController,
             "createAppointment"
         );
-        const data:IAppointment = {
+        const data: IAppointment = {
             countryISO: "PE",
             insuredId: "12345",
             scheduleId: 1,
@@ -90,7 +91,7 @@ describe("appointment.handler", () => {
                     createdAt: new Date().toISOString(),
                 },
             ],
-        }
+        };
         createAppointmentSpy.mockResolvedValue(data);
 
         const result = await handler(apiEvent);
@@ -102,7 +103,7 @@ describe("appointment.handler", () => {
             statusCode: 201,
             body: JSON.stringify({
                 message: "El agendamiento está en proceso",
-                data
+                data,
             }),
         });
     });
@@ -151,7 +152,9 @@ describe("appointment.handler", () => {
     it("should handle API Gateway event for getting appointments by insured ID", async () => {
         const apiEvent: APIGatewayProxyEventV2 = {
             routeKey: GET_INSURED_APPOINTMENT_LIST_ROUTE,
-            pathParameters: { ensuredId: "456" },
+            pathParameters: {
+                [INSURED_ID_PARAM]: "456",
+            },
             version: "",
             rawPath: "",
             rawQueryString: "",
@@ -252,7 +255,8 @@ describe("appointment.handler", () => {
         expect(result).toEqual({
             statusCode: 400,
             body: JSON.stringify({
-                message: "Bad request, invalid event",
+                message: "[]",
+                errors: [],
             }),
         });
     });

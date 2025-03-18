@@ -13,7 +13,8 @@ describe("AppointmentService", () => {
         mockAppointmentRepository = {
             create: jest.fn(),
             getAllByEnsuranceId: jest.fn(),
-            updateStatusById: jest.fn(),
+            updateAppointment: jest.fn(),
+            getAppointmentDetail: jest.fn(),
         };
 
         mockAppointmentCountryProducer = {
@@ -107,20 +108,63 @@ describe("AppointmentService", () => {
         const insuredId = "123";
         const scheduleId = 1;
 
-        await appointmentService.completeAppointment(insuredId, scheduleId);
-
-        expect(mockAppointmentRepository.updateStatusById).toHaveBeenCalledWith(
+        mockAppointmentRepository.getAppointmentDetail.mockResolvedValue({
             insuredId,
             scheduleId,
-            AppointmentStatusType.COMPLETED
-        );
+            lastStatus: AppointmentStatusType.PENDING,
+            statuses: [
+                {
+                    status: AppointmentStatusType.PENDING,
+                    createdAt: "",
+                },
+            ],
+            createdAt: "",
+            updatedAt: "",
+            countryISO: "",
+        });
+
+        await appointmentService.completeAppointment(insuredId, scheduleId);
+
+        expect(mockAppointmentRepository.updateAppointment).toHaveBeenCalledWith({
+            insuredId,
+            scheduleId,
+            lastStatus: AppointmentStatusType.COMPLETED,
+            statuses: [
+                {
+                    status: AppointmentStatusType.PENDING,
+                    createdAt: "",
+                },
+                {
+                    status: AppointmentStatusType.COMPLETED,
+                    createdAt: expect.any(String),
+                },
+            ],
+            createdAt: "",
+            updatedAt: expect.any(String),
+            countryISO: "",
+        });
     });
 
     it("should throw an error if repository updateStatusById fails", async () => {
         const insuredId = "123";
         const scheduleId = 1;
 
-        mockAppointmentRepository.updateStatusById.mockRejectedValue(
+        mockAppointmentRepository.getAppointmentDetail.mockResolvedValue({
+            insuredId,
+            scheduleId,
+            lastStatus: AppointmentStatusType.PENDING,
+            statuses: [
+                {
+                    status: AppointmentStatusType.PENDING,
+                    createdAt: "",
+                },
+            ],
+            createdAt: "",
+            updatedAt: "",
+            countryISO: "",
+        });
+
+        mockAppointmentRepository.updateAppointment.mockRejectedValue(
             new Error("Repository error")
         );
 

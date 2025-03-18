@@ -14,7 +14,6 @@ export class AppointmentController {
     }
 
     async getAppointmentsByInsuredId(insuredId: unknown) {
-        console.log({ insuredId });
         const appointments = await this.appointmentService.getAppointmentsByInsuredId(
             insuredIdSchema.parse(insuredId)
         );

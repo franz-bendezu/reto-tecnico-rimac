@@ -40,7 +40,6 @@ export async function handler(
         201
       );
     } else if (event.routeKey === GET_INSURED_APPOINTMENT_LIST_ROUTE) {
-      console.log("Event received", event);
       const appointments = await appointmentController.getAppointmentsByInsuredId(
         event.pathParameters?.insuredId
       );

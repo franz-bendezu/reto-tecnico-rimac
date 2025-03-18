@@ -3,6 +3,7 @@ import { appointmentCreateSchema, appointmentCompleteSchema, scheduleIdSchema, c
 import { extendZodWithOpenApi, OpenApiGeneratorV3, OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import { CREATE_APPOINTMENT_PATH, INSURED_APPOINTMENT_LIST_PATH } from "../src/appointments/adapters/constants/handler-routes.constant";
 import { insuredIdSchema } from '../src/common/adapters/schemas/insured';
+import { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator';
 
 /**
  * Registros de esquemas para la documentación OpenAPI
@@ -12,6 +13,8 @@ import { insuredIdSchema } from '../src/common/adapters/schemas/insured';
 
 // Extend Zod with OpenAPI capabilities
 extendZodWithOpenApi(z);
+
+export const API_GATEWAY_URL = process.env.API_GATEWAY_URL || 'https://xxxxx.us-east-1.amazonaws.com'
 
 /**
  * Registro para almacenar esquemas, operaciones y definiciones de OpenAPI.
@@ -173,11 +176,7 @@ registry.registerPath({
   }
 });
 
-/**
- * Documento OpenAPI generado
- * Contiene toda la información de la API para su documentación
- */
-export const openApiDocument = new OpenApiGeneratorV3(registry.definitions).generateDocument({
+export const OPEN_API_CONFIG: OpenAPIObjectConfig = {
   info: {
     title: 'API de Servicio de Citas',
     version: '1.0.0',
@@ -185,9 +184,14 @@ export const openApiDocument = new OpenApiGeneratorV3(registry.definitions).gene
   },
   servers: [
     {
-      url: ' https://xxxxx.us-east-1.amazonaws.com/dev',
-      description: 'Servidor de desarrollo local',
+      url: API_GATEWAY_URL,
+      description: 'URL de las funciones de la API',
     },
   ],
   openapi: '3.0.0',
-});
+}
+/**
+ * Documento OpenAPI generado
+ * Contiene toda la información de la API para su documentación
+ */
+export const openApiDocument = new OpenApiGeneratorV3(registry.definitions).generateDocument(OPEN_API_CONFIG);

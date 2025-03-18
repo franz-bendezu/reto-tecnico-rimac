@@ -154,7 +154,8 @@ describe("appointment.handler", () => {
             isBase64Encoded: false
         };
 
-        (appointmentController.getAppointmentsByInsuredId as jest.Mock).mockResolvedValue({
+        const getAppointmentSpy = jest.spyOn(appointmentController, "getAppointmentsByInsuredId");
+        getAppointmentSpy.mockResolvedValue({
             statusCode: 200,
             body: { appointments: [] },
         });
@@ -166,6 +167,53 @@ describe("appointment.handler", () => {
             statusCode: 200,
             body: JSON.stringify({ appointments: [] }),
         });
+    });
+
+
+    it("should handle API Gateway event for getting appointments by insured ID when path parameters are undefined", async () => {
+        const apiEvent: APIGatewayProxyEventV2 = {
+            routeKey: GET_INSURED_APPOINTMENT_LIST_ROUTE,
+            pathParameters: undefined,
+            version: "",
+            rawPath: "",
+            rawQueryString: "",
+            headers: {},
+            requestContext: {
+                accountId: "",
+                apiId: "",
+                domainName: "",
+                domainPrefix: "",
+                http: {
+                    method: "",
+                    path: "",
+                    protocol: "",
+                    sourceIp: "",
+                    userAgent: ""
+                },
+                requestId: "",
+                routeKey: "",
+                stage: "",
+                time: "",
+                timeEpoch: 0
+            },
+            isBase64Encoded: false
+        };
+
+        const getAppointmentSpy = jest.spyOn(appointmentController, "getAppointmentsByInsuredId");
+        getAppointmentSpy.mockResolvedValue({
+            statusCode: 400,
+            body: { message: "Bad request" },
+        });
+
+        const result = await handler(apiEvent);
+
+        expect(getAppointmentSpy).toHaveBeenCalledWith(undefined);
+
+        expect(result).toEqual({
+            statusCode: 400,
+            body: JSON.stringify({ message: "Bad request" }),
+        });
+
     });
 
     it("should return 400 for unknown route", async () => {

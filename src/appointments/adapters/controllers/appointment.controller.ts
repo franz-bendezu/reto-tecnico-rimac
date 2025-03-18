@@ -30,7 +30,7 @@ export class AppointmentController {
             );
             return {
                 statusCode: 200,
-                body: appointments,
+                body: { appointments },
             };
         } catch (error) {
             return this.handleError(error);

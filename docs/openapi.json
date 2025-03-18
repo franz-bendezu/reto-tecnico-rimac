@@ -6,8 +6,8 @@
   },
   "servers": [
     {
-      "url": " https://xxxxx.us-east-1.amazonaws.com/dev",
-      "description": "Servidor de desarrollo local"
+      "url": "https://xxxxx.us-east-1.amazonaws.com",
+      "description": "URL de las funciones de la API"
     }
   ],
   "openapi": "3.0.0",

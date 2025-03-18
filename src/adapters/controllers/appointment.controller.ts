@@ -23,7 +23,7 @@ export class AppointmentController {
         try {
             const ensuredId = insuredIdSchema.parse(insuredId);
             const appointments = await this.appointmentService.getAppointmentsByInsuredId(
-                insuredId as string
+                ensuredId
             );
             return {
                 statusCode: 200,

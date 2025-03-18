@@ -82,7 +82,7 @@ provider:
                   - Ref: AWS::Region
                   - ":"
                   - Ref: AWS::AccountId
-                  - ":event-bus/"
+                  - ":event-bus/${self:provider.environment.EVENT_BUS_NAME}"
         - Effect: Allow
           Action:
             - events:PutRule

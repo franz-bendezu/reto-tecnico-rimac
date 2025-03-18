@@ -4,6 +4,7 @@ import { AppointmentPEConfigEnv } from "./infraestructure/config/appointment-pe-
 import { AppointmentProducer } from "./infraestructure/messasing/appointment.producer";
 import { AppointmentCountryRDSRepository } from "./infraestructure/repositories/appointment-country-rds.repository";
 import { CountryAppointmentController } from "./adapters/controllers/appointment-country.controller";
+import { AppointmentCountryMemoryRepository } from "./infraestructure/repositories/appointment-country-memory.repository";
 
 // Aquí se usa el patrón de diseño `Inyección de Dependencias` 
 // para proveer los servicios necesarios para el controlador de citas en Perú
@@ -13,9 +14,11 @@ const appointmentProducer = new AppointmentProducer(
   new EventBridgeClient({}),
   config.eventBridge
 );
-const appointmentCountryRepository = new AppointmentCountryRDSRepository(
-  config.rdsDatabase
-);
+const appointmentCountryRepository =
+  process.env.IS_LOCAL ? new AppointmentCountryMemoryRepository() :
+    new AppointmentCountryRDSRepository(
+      config.rdsDatabase
+    );
 export const appointmentService = new AppointmentPEService(
   appointmentCountryRepository,
   appointmentProducer

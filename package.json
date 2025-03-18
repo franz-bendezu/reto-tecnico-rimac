@@ -8,7 +8,7 @@
     "local": "serverless dev",
     "deploy": "serverless deploy",
     "build:openapi": "npx ts-node ./docs/script.ts",
-    "swagger": "npx ts-node ./docs/server.ts"
+    "swagger": "npx ts-node-dev ./docs/server.ts"
   },
   "author": "",
   "license": "ISC",

@@ -100,6 +100,21 @@ provider:
     EVENT_SOURCE: "appointment.service"
     EVENT_DETAIL_TYPE: "appointmentCompleted"
 
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:3000
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - OPTIONS
+      exposeHeaders:
+        - Access-Control-Allow-Origin
+      maxAge: 6000 # In seconds
+  
 resources:
   Resources:
     AppointmentTable:

@@ -6,16 +6,28 @@ export class AppointmentPEConfigEnv extends AppointmentCountryEnvConfig {
     const awsRegion = super.awsRegion;
     return {
       get proxyHostName(): string {
-        return process.env.DB_PE_PROXY_HOST_NAME!;
+        if (!process.env.DB_PE_PROXY_HOST_NAME) {
+          throw new Error('DB_PE_PROXY_HOST_NAME is not set');
+        }
+        return process.env.DB_PE_PROXY_HOST_NAME;
       },
       get port(): number {
-        return parseInt(process.env.DB_PE_PORT!);
+        if (!process.env.DB_PE_PORT) {
+          throw new Error('DB_PE_PORT is not set');
+        }
+        return parseInt(process.env.DB_PE_PORT);
       },
       get dbName(): string {
-        return process.env.DB_PE_NAME!;
+        if (!process.env.DB_PE_NAME) {
+          throw new Error('DB_PE_NAME is not set');
+        }
+        return process.env.DB_PE_NAME;
       },
       get dbUserName(): string {
-        return process.env.DB_PE_USER_NAME!;
+        if (!process.env.DB_PE_USER_NAME) {
+          throw new Error('DB_PE_USER_NAME is not set');
+        }
+        return process.env.DB_PE_USER_NAME;
       },
       get awsRegion(): string {
         return awsRegion;

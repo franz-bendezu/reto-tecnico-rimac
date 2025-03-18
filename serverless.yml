@@ -83,7 +83,6 @@ provider:
                   - ":"
                   - Ref: AWS::AccountId
                   - ":event-bus/"
-                  - Ref: environment.EVENT_BUS_NAME
         - Effect: Allow
           Action:
             - events:PutRule
@@ -186,12 +185,14 @@ resources:
 
 functions:
   appointment:
-    handler: src/adapters/handlers/appointmentHandler.handler
+    handler: src/adapters/handlers/appointment.handler.handler
     events:
-      - httpApi:
+      - http:
+          integration: lambda
           path: /appointments
           method: post
-      - httpApi:
+      - http:
+          integration: lambda
           path: /insureds/{insuredId}/appointments
           method: get
       - sqs:
@@ -200,7 +201,7 @@ functions:
               - sqs
               - Arn
   appointment_cl:
-    handler: src/adapters/handlers/appointmentPEHandler.handler
+    handler: src/adapters/handlers/appointment-pe.handler.handler
     events:
       - sqs:
           arn:
@@ -208,7 +209,7 @@ functions:
               - sqsPE
               - Arn
   appointment_pe:
-    handler: src/adapters/handlers/appointmentCLHandler.handler
+    handler: src/adapters/handlers/appointment-cl.handler.handler
     events:
       - sqs:
           arn:

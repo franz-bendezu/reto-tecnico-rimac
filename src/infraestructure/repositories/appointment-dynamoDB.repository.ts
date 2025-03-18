@@ -9,11 +9,11 @@ import {
 import { IAppointmentRepository } from "./appointment.repository.interface";
 import { IAppointmentConfig } from "../config/appointment.config.interface";
 
-export type AppointmentDynamoClient  = Pick<DynamoDBDocumentClient, "send">;
+export type AppointmentDynamoClient = Pick<DynamoDBDocumentClient, "send">;
 
 export class AppointmentDynamoDBRepository implements IAppointmentRepository {
 
-  constructor(private docClient: AppointmentDynamoClient, private config: IAppointmentConfig) {}
+  constructor(private docClient: AppointmentDynamoClient, private config: IAppointmentConfig) { }
 
   async create(appointment: IBaseAppointment): Promise<void> {
     await this.docClient.send(
@@ -53,15 +53,7 @@ export class AppointmentDynamoDBRepository implements IAppointmentRepository {
     scheduleId: number,
     status: string
   ): Promise<void> {
-    const { Item } = await this.docClient.send(
-      new GetCommand({
-        TableName: this.config.dynamoDBTableName,
-        Key: {
-          insuredId,
-          scheduleId,
-        },
-      })
-    );
+    const Item = await this.getAppointmentDetail(insuredId, scheduleId);
 
     const existingStatuses = Item?.statuses || [];
 
@@ -82,5 +74,18 @@ export class AppointmentDynamoDBRepository implements IAppointmentRepository {
         },
       })
     );
+  }
+
+  public async getAppointmentDetail(insuredId: string, scheduleId: number): Promise<IAppointment | null | undefined> {
+    const { Item } = await this.docClient.send(
+      new GetCommand({
+        TableName: this.config.dynamoDBTableName,
+        Key: {
+          insuredId,
+          scheduleId,
+        },
+      })
+    );
+    return Item as IAppointment | null | undefined;
   }
 }

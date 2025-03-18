@@ -14,7 +14,10 @@ const appointmentProducer = new AppointmentProducer(
   new EventBridgeClient({}),
   config.eventBridge
 );
-const appointmentCountryRepository = new AppointmentCountryMemoryRepository();
+const appointmentCountryRepository =
+  new AppointmentCountryRDSRepository(
+    config.rdsDatabase
+  );
 export const appointmentService = new AppointmentCLService(
   appointmentCountryRepository,
   appointmentProducer

@@ -36,7 +36,7 @@ export class AppointmentService implements IAppointmentService {
     if (!item) {
       throw new Error("Appointment not found");
     }
-    const existingStatuses = item?.statuses || [];
+    const existingStatuses = item.statuses;
     const status = AppointmentStatusType.COMPLETED;
     await this.appointmentRepository.updateAppointment(
       {

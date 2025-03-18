@@ -1,13 +1,13 @@
 {
   "info": {
-    "title": "Appointment Service API",
+    "title": "API de Servicio de Citas",
     "version": "1.0.0",
-    "description": "API for managing appointments"
+    "description": "API para gestionar citas"
   },
   "servers": [
     {
-      "url": " https://bbpveee6vb.execute-api.us-east-1.amazonaws.com/dev",
-      "description": "Local development server"
+      "url": " https://xxxxx.us-east-1.amazonaws.com/dev",
+      "description": "Servidor de desarrollo local"
     }
   ],
   "openapi": "3.0.0",
@@ -37,7 +37,7 @@
           "scheduleId",
           "countryISO"
         ],
-        "description": "Schema for creating a new appointment"
+        "description": "Esquema para crear una nueva cita"
       },
       "AppointmentComplete": {
         "type": "object",
@@ -55,7 +55,7 @@
           "insuredId",
           "scheduleId"
         ],
-        "description": "Schema for completing an appointment"
+        "description": "Esquema para completar una cita"
       },
       "AppointmentResponse": {
         "type": "object",
@@ -78,14 +78,14 @@
           "scheduleId",
           "countryISO"
         ],
-        "description": "Schema for appointment response"
+        "description": "Esquema para respuesta de cita"
       },
       "AppointmentListResponse": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/AppointmentResponse"
         },
-        "description": "Schema for appointment list response"
+        "description": "Esquema para respuesta de lista de citas"
       },
       "ErrorResponse": {
         "type": "object",
@@ -97,7 +97,7 @@
         "required": [
           "message"
         ],
-        "description": "Schema for error response"
+        "description": "Esquema para respuesta de error"
       }
     },
     "parameters": {}
@@ -105,10 +105,10 @@
   "paths": {
     "/appointments": {
       "post": {
-        "summary": "Create a new appointment",
-        "description": "Endpoint to create a new appointment for an insured person",
+        "summary": "Crear una nueva cita",
+        "description": "Endpoint para crear una nueva cita para una persona asegurada",
         "tags": [
-          "Appointments"
+          "Citas"
         ],
         "requestBody": {
           "content": {
@@ -121,7 +121,7 @@
         },
         "responses": {
           "200": {
-            "description": "The created appointment",
+            "description": "La cita creada",
             "content": {
               "application/json": {
                 "schema": {
@@ -135,10 +135,10 @@
     },
     "/insureds/{insuredId}/appointments": {
       "get": {
-        "summary": "Get appointments by insured ID",
-        "description": "Retrieve all appointments for a specific insured person",
+        "summary": "Obtener citas por ID del asegurado",
+        "description": "Recuperar todas las citas para una persona asegurada específica",
         "tags": [
-          "Appointments"
+          "Citas"
         ],
         "parameters": [
           {
@@ -152,7 +152,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List of appointments for the insured person",
+            "description": "Lista de citas para la persona asegurada",
             "content": {
               "application/json": {
                 "schema": {

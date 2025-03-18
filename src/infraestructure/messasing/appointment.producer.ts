@@ -1,5 +1,5 @@
 import { IAppointmentCreate } from "../../domain/interfaces/appointment-create";
-import { IAppointmentCountryConfig } from "../config/appointment-country.config.interface";
+import { IAppointmentCountryConfig, IEventBridgeConfig } from "../config/appointment-country.config.interface";
 import { IAppointmentProducer } from "./appointment.producer.interface";
 import {
   EventBridgeClient,
@@ -10,9 +10,9 @@ import {
 export type EventBridgeClientAppointment = Pick<EventBridgeClient, "send">;
 
 export class AppointmentProducer implements IAppointmentProducer {
-  constructor(private eventBridgeClient: EventBridgeClientAppointment, private config: IAppointmentCountryConfig ) {}
+  constructor(private eventBridgeClient: EventBridgeClientAppointment, private config: IEventBridgeConfig ) {}
   async sendAppointmentCountry(appointment: IAppointmentCreate): Promise<void> {
-    const eventBridgeConfig = this.config.eventBridge;
+    const eventBridgeConfig = this.config;
     const params:PutEventsCommandInput = {
       Entries: [
         {

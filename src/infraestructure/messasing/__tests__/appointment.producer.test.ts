@@ -1,30 +1,20 @@
-import { AppointmentProducer } from "../appointment.producer";
+import { AppointmentProducer, EventBridgeClientAppointment } from "../appointment.producer";
 import { IAppointmentCreate } from "../../../domain/interfaces/appointment-create";
-import { IAppointmentCountryConfig } from "../../config/appointment-country.config.interface";
+import { IEventBridgeConfig } from "../../config/appointment-country.config.interface";
 import { PutEventsCommand } from "@aws-sdk/client-eventbridge";
 
 describe("AppointmentProducer", () => {
     let appointmentProducer: AppointmentProducer;
-    let mockEventBridgeClient: { send: jest.Mock };
-    let mockConfig: IAppointmentCountryConfig;
+    let mockEventBridgeClient: jest.Mocked<EventBridgeClientAppointment>;
+    let mockConfig: IEventBridgeConfig;
 
     beforeEach(() => {
         mockEventBridgeClient = { send: jest.fn() };
         mockConfig = {
-            eventBridge: {
-                detailType: "testDetailType",
-                busName: "testBusName",
-                source: "testSource",
-            },
-            awsRegion: "us-east-1",
-            rdsDatabase: {
-                proxyHostName: "",
-                port: 0,
-                dbName: "",
-                dbUserName: "",
-                awsRegion: "",
-            },
-        };
+            detailType: "testDetailType",
+            busName: "testBusName",
+            source: "testSource",
+        }
         appointmentProducer = new AppointmentProducer(
             mockEventBridgeClient,
             mockConfig
@@ -41,9 +31,9 @@ describe("AppointmentProducer", () => {
             Entries: [
                 {
                     Detail: JSON.stringify(appointment),
-                    DetailType: mockConfig.eventBridge.detailType,
-                    EventBusName: mockConfig.eventBridge.busName,
-                    Source: mockConfig.eventBridge.source,
+                    DetailType: mockConfig.detailType,
+                    EventBusName: mockConfig.busName,
+                    Source: mockConfig.source,
                 },
             ],
         };
@@ -62,7 +52,9 @@ describe("AppointmentProducer", () => {
             countryISO: "PE",
         };
         const error = new Error("EventBridge error");
-        mockEventBridgeClient.send.mockRejectedValueOnce(error);
+        mockEventBridgeClient.send.mockImplementationOnce(() => {
+            throw error;
+        });
 
         await expect(
             appointmentProducer.sendAppointmentCountry(appointment)

@@ -252,8 +252,7 @@ describe("appointment.handler", () => {
         expect(result).toEqual({
             statusCode: 400,
             body: JSON.stringify({
-                message: "[]",
-                errors: [],
+                message: "Bad request, invalid event",
             }),
         });
     });

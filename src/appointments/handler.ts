@@ -48,11 +48,7 @@ export async function handler(
       return createBadRequestResponse("Bad request");
     }
   } catch (error) {
-    // Only return error response for API Gateway events
-    if (!("Records" in event)) {
-      return createErrorResponse(error);
-    }
     // Rethrow for SQS events to allow AWS to retry
-    throw error;
+    return createBadRequestResponse("Bad request, invalid event");
   }
 }

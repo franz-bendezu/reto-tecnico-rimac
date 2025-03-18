@@ -5,8 +5,9 @@ export const handler: SQSHandler = async (event) => {
   try {
     await Promise.all(
       event.Records.map(async (record) => {
-        const appointment = JSON.parse(record.body);
-        await appointmentCountryController.createAppointment(appointment);
+        const recordBody = JSON.parse(record.body);
+        const recordMessage = JSON.parse(recordBody.Message);
+        await appointmentCountryController.createAppointment(recordMessage);
         console.log("Appointment created successfully for Chile");
       })
     );

@@ -40,15 +40,15 @@ export async function handler(
         201
       );
     } else if (event.routeKey === GET_INSURED_APPOINTMENT_LIST_ROUTE) {
+      console.log("Event received", event);
       const appointments = await appointmentController.getAppointmentsByInsuredId(
-        event.pathParameters?.ensuredId
+        event.pathParameters?.insuredId
       );
       return createSuccessResponse({ appointments });
     } else {
       return createBadRequestResponse("Bad request");
     }
   } catch (error) {
-    // Rethrow for SQS events to allow AWS to retry
-    return createBadRequestResponse("Bad request, invalid event");
+    return createErrorResponse(error);
   }
 }

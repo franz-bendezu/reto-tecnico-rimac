@@ -9,16 +9,16 @@ export class AppointmentController {
     async createAppointment(data: unknown) {
         const validData = appointmentCreateSchema.parse(data);
         const result = await this.appointmentService.createAppointment(validData);
-        
+
         return result;
     }
 
     async getAppointmentsByInsuredId(insuredId: unknown) {
-        const ensuredId = insuredIdSchema.parse(insuredId);
+        console.log({ insuredId });
         const appointments = await this.appointmentService.getAppointmentsByInsuredId(
-            ensuredId
+            insuredIdSchema.parse(insuredId)
         );
-        
+
         return appointments;
     }
 

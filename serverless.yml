@@ -187,11 +187,11 @@ functions:
   appointment:
     handler: src/appointments/handler.handler
     events:
-      - http:
+      - httpApi:
           integration: lambda
           path: /appointments
           method: post
-      - http:
+      - httpApi:
           integration: lambda
           path: /insureds/{insuredId}/appointments
           method: get

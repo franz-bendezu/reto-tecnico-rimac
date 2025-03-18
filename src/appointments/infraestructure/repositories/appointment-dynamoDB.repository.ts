@@ -38,6 +38,7 @@ export class AppointmentDynamoDBRepository implements IAppointmentRepository {
   }
 
   async getAllByEnsuranceId(insuredId: string): Promise<IAppointment[]> {
+    console.log(insuredId);
     const { Items = [] } = await this.docClient.send(
       new ScanCommand({
         TableName: this.config.dynamoDBTableName,

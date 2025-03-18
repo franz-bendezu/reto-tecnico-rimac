@@ -1,4 +1,5 @@
-import { handler, CREATE_APPOINTMENT_ROUTE, GET_INSURED_APPOINTMENT_LIST_ROUTE } from "../handler";
+import { handler } from "../handler";
+import { CREATE_APPOINTMENT_ROUTE, GET_INSURED_APPOINTMENT_LIST_ROUTE } from "../adapters/constants/handler-routes.constant";
 import { APIGatewayProxyEventV2, SQSEvent } from "aws-lambda";
 import { appointmentController } from "../handler.provider";
 

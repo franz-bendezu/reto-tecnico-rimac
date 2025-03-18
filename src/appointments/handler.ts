@@ -5,11 +5,7 @@ import type {
   SQSEvent,
 } from "aws-lambda";
 import { appointmentController } from "./handler.provider";
-
-export const CREATE_APPOINTMENT_PATH = "/appointments";
-export const CREATE_APPOINTMENT_ROUTE = `POST ${CREATE_APPOINTMENT_PATH}`;
-export const INSURED_APPOINTMENT_LIST_PATH = "/insureds/{insuredId}/appointments";
-export const GET_INSURED_APPOINTMENT_LIST_ROUTE = `GET ${INSURED_APPOINTMENT_LIST_PATH}`;
+import { CREATE_APPOINTMENT_ROUTE, GET_INSURED_APPOINTMENT_LIST_ROUTE } from "./adapters/constants/handler-routes.constant";
 
 /** Este handler es el encargado de recibir los eventos de la cola de SQS
  * y de las peticiones HTTP para crear y obtener citas médicas.

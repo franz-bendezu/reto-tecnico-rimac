@@ -1,5 +1,5 @@
 import type { SQSHandler } from "aws-lambda";
-import { appointmentCountryController } from "./appointment-cl.handler.provider";
+import { appointmentCountryController } from "./handler-cl.provider";
 
 export const handler: SQSHandler = async (event) => {
   await Promise.all(

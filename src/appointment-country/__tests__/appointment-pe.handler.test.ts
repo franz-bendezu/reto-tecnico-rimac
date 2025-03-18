@@ -1,8 +1,8 @@
 import { SQSHandler } from "aws-lambda";
-import { handler } from "../appointment-pe.handler";
-import { appointmentCountryController } from "../appointment-pe.handler.provider";
+import { handler } from "../handler-pe";
+import { appointmentCountryController } from "../handler-pe.provider";
 
-jest.mock("../appointment-pe.handler.provider");
+jest.mock("../handler-pe.provider");
 
 describe("appointment-pe.handler", () => {
     const mockCreateAppointment = jest.fn();

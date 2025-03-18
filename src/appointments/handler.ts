@@ -4,7 +4,7 @@ import type {
   SQSBatchResponse,
   SQSEvent,
 } from "aws-lambda";
-import { appointmentController } from "./appointment.handler.provider";
+import { appointmentController } from "./handler.provider";
 
 export const CREATE_APPOINTMENT_ROUTE = "POST /appointments";
 export const GET_ENSURED_APPOINTMENT_LIST =

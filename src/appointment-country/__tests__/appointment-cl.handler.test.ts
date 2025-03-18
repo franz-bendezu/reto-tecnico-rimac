@@ -1,7 +1,7 @@
-import { handler } from "../appointment-cl.handler";
-import { appointmentCountryController } from "../appointment-cl.handler.provider";
+import { handler } from "../handler-cl";
+import { appointmentCountryController } from "../handler-cl.provider";
 
-jest.mock("../appointment-cl.handler.provider");
+jest.mock("../handler-cl.provider");
 
 describe("appointment-cl.handler", () => {
     const mockCreateAppointment = jest.fn();

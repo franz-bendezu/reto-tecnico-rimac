@@ -185,7 +185,7 @@ resources:
 
 functions:
   appointment:
-    handler: src/adapters/handlers/appointment.handler.handler
+    handler: src/appointments/handler.handler
     events:
       - http:
           integration: lambda
@@ -201,7 +201,7 @@ functions:
               - sqs
               - Arn
   appointment_cl:
-    handler: src/adapters/handlers/appointment-pe.handler.handler
+    handler: src/appointment-country/handler-pe.handler
     events:
       - sqs:
           arn:
@@ -209,7 +209,7 @@ functions:
               - sqsPE
               - Arn
   appointment_pe:
-    handler: src/adapters/handlers/appointment-cl.handler.handler
+    handler: src/appointment-country/handler-cl.handler
     events:
       - sqs:
           arn:
@@ -218,7 +218,7 @@ functions:
               - Arn
 
   docs:
-    handler: src/adapters/handlers/docs.handler.handler
+    handler: src/docs/handler.handler
     events:
       - httpApi:
           path: /docs

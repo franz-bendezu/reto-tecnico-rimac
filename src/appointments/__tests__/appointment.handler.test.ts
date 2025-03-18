@@ -1,8 +1,8 @@
-import { handler, CREATE_APPOINTMENT_ROUTE, GET_ENSURED_APPOINTMENT_LIST } from "../appointment.handler";
+import { handler, CREATE_APPOINTMENT_ROUTE, GET_ENSURED_APPOINTMENT_LIST } from "../handler";
 import { APIGatewayProxyEventV2, SQSEvent } from "aws-lambda";
-import { appointmentController } from "../appointment.handler.provider";
+import { appointmentController } from "../handler.provider";
 
-jest.mock("../appointment.handler.provider");
+jest.mock("../handler.provider");
 
 describe("appointment.handler", () => {
     beforeEach(() => {

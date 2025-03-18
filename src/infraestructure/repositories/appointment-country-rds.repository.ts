@@ -3,15 +3,14 @@ import { Signer } from "@aws-sdk/rds-signer";
 import mysql from "mysql2/promise";
 import type { Connection } from "mysql2/promise";
 import { IAppointmentCountryRepository } from "./appointment-country.repository.interface";
-import { IAppointmentCountryConfig, IDatabaseConfig } from "../config/appointment-country.config.interface";
+import { IDatabaseConfig } from "../config/appointment-country.config.interface";
 
 // RDS settings
 
 export class AppointmentCountryRDSRepository
-  implements IAppointmentCountryRepository
-{
+  implements IAppointmentCountryRepository {
   token?: string;
-  constructor(private databaseConfig: IDatabaseConfig) {}
+  constructor(private databaseConfig: IDatabaseConfig) { }
 
   async createAuthToken(): Promise<string> {
     // Create RDS Signer object

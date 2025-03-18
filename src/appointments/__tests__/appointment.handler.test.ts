@@ -65,17 +65,63 @@ describe("appointment.handler", () => {
             isBase64Encoded: false
         };
 
-        (appointmentController.createAppointment as jest.Mock).mockResolvedValue({
+        const createAppointmentSpy = jest.spyOn(appointmentController, "createAppointment");
+
+        createAppointmentSpy.mockResolvedValue({
             statusCode: 201,
             body: { message: "Appointment created" },
         });
 
         const result = await handler(apiEvent);
 
-        expect(appointmentController.createAppointment).toHaveBeenCalledWith({ name: "Test Appointment" });
+        expect(createAppointmentSpy).toHaveBeenCalledWith({ name: "Test Appointment" });
         expect(result).toEqual({
             statusCode: 201,
             body: JSON.stringify({ message: "Appointment created" }),
+        });
+    });
+
+
+    it("should hanlde API Gateway event when body is undefined", async () => {
+        const apiEvent: APIGatewayProxyEventV2 = {
+            routeKey: CREATE_APPOINTMENT_ROUTE,
+            body: undefined,
+            version: "",
+            rawPath: "",
+            rawQueryString: "",
+            headers: {},
+            requestContext: {
+                accountId: "",
+                apiId: "",
+                domainName: "",
+                domainPrefix: "",
+                http: {
+                    method: "", path: "", protocol: "", sourceIp: "", userAgent: ""
+                },
+                requestId: "",
+                routeKey: "",
+                stage: "",
+                time: "",
+                timeEpoch: 0
+            },
+            isBase64Encoded: false
+        };
+
+
+        const createAppointmentSpy = jest.spyOn(appointmentController, "createAppointment");
+
+        createAppointmentSpy.mockResolvedValue({
+            statusCode: 400,
+            body: { message: "Bad request" },
+        });
+
+        const result = await handler(apiEvent);
+
+        expect(createAppointmentSpy).toHaveBeenCalledWith({});
+
+        expect(result).toEqual({
+            statusCode: 400,
+            body: JSON.stringify({ message: "Bad request" }),
         });
     });
 
@@ -148,7 +194,7 @@ describe("appointment.handler", () => {
                 timeEpoch: 0
             },
             isBase64Encoded: false
-        } ;
+        };
 
         const result = await handler(apiEvent);
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createSuccessResponse, createBadRequestResponse, createErrorResponse, apiHandler } from "../api-response.utils";
+import { createSuccessResponse, createBadRequestResponse, createErrorResponse } from "../api-response.utils";
 import { ResponseMessage } from "../../constants/api-response.constants";
 
 describe("API Response Utilities", () => {
@@ -98,33 +98,6 @@ describe("API Response Utilities", () => {
           message: "Internal server error"
         })
       });
-    });
-  });
-
-  describe("apiHandler", () => {
-    it("should handle successful requests", async () => {
-      const mockHandler = jest.fn().mockResolvedValue({ message: "Success" });
-      const wrappedHandler = apiHandler(mockHandler);
-      
-      const event = { body: '{"name":"test"}' };
-      const response = await wrappedHandler(event);
-      
-      expect(mockHandler).toHaveBeenCalledWith(event);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toBe(JSON.stringify({ message: "Success" }));
-    });
-
-    it("should handle errors", async () => {
-      const mockHandler = jest.fn().mockRejectedValue(new Error("Test error"));
-      const wrappedHandler = apiHandler(mockHandler);
-      
-      const event = { body: '{"name":"test"}' };
-      const response = await wrappedHandler(event);
-      
-      expect(mockHandler).toHaveBeenCalledWith(event);
-      expect(response.statusCode).toBe(500);
-      const body = JSON.parse(response.body as string);
-      expect(body.message).toBe("Internal server error");
     });
   });
 });

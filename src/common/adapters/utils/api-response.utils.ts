@@ -53,17 +53,3 @@ export const createErrorResponse = (
     }),
   };
 };
-
-/**
- * Handler wrapper for API Gateway handlers
- */
-export const apiHandler = (handler: (event: any) => Promise<any>) => {
-  return async (event: any): Promise<APIGatewayProxyStructuredResultV2> => {
-    try {
-      const result = await handler(event);
-      return createSuccessResponse(result);
-    } catch (error) {
-      return createErrorResponse(error);
-    }
-  };
-};

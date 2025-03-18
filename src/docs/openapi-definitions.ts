@@ -1,7 +1,6 @@
 import { z } from 'zod';
-import { registerSchema, registry } from './zod-openapi';
 import { appointmentCreateSchema, appointmentCompleteSchema, scheduleIdSchema, countryISOSchema } from '../common/adapters/schemas/appointment';
-import { OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
+import { extendZodWithOpenApi, OpenApiGeneratorV3, OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import { CREATE_APPOINTMENT_PATH, INSURED_APPOINTMENT_LIST_PATH } from '../appointments/handler';
 import { insuredIdSchema } from '../common/adapters/schemas/insured';
 
@@ -10,31 +9,40 @@ import { insuredIdSchema } from '../common/adapters/schemas/insured';
  * Estos esquemas definen la estructura de los datos utilizados en la API
  */
 
+
+// Extend Zod with OpenAPI capabilities
+extendZodWithOpenApi(z);
+
+/**
+ * Registro para almacenar esquemas, operaciones y definiciones de OpenAPI.
+ * Este registro se utiliza para generar la documentación OpenAPI de la API.
+ */
+export const registry = new OpenAPIRegistry();
+
 /**
  * Esquema para la creación de citas
  * Define la estructura de datos requerida para crear una nueva cita
  */
-const AppointmentCreateSchema = registerSchema(
-  appointmentCreateSchema,
+const AppointmentCreateSchema = registry.register(
   'AppointmentCreate',
-  'Esquema para crear una nueva cita'
+  appointmentCreateSchema.openapi({ description: 'Esquema para crear una nueva cita' })
 );
 
 /**
  * Esquema para completar citas
  * Define la estructura de datos requerida para marcar una cita como completada
  */
-const AppointmentCompleteSchema = registerSchema(
-  appointmentCompleteSchema,
+const AppointmentCompleteSchema = registry.register(
   'AppointmentComplete',
-  'Esquema para completar una cita'
+  appointmentCompleteSchema.openapi({ description: 'Esquema para completar una cita' })
 );
 
 /**
  * Esquema de respuesta para citas individuales
  * Define la estructura de los datos devueltos para una cita
  */
-const AppointmentResponseSchema = registerSchema(
+const AppointmentResponseSchema = registry.register(
+  'AppointmentResponse',
   z.object({
     insuredId: insuredIdSchema,
     scheduleId: scheduleIdSchema,
@@ -48,31 +56,27 @@ const AppointmentResponseSchema = registerSchema(
         createdAt: z.string(),
       })
     ),
-  }),
-  'AppointmentResponse',
-  'Esquema para respuesta de cita'
+  }).openapi({ description: 'Esquema para respuesta de cita' })
 );
 
 /**
  * Esquema de respuesta para listas de citas
  * Define la estructura de los datos devueltos para múltiples citas
  */
-const AppointmentListResponseSchema = registerSchema(
-  z.array(AppointmentResponseSchema),
+const AppointmentListResponseSchema = registry.register(
   'AppointmentListResponse',
-  'Esquema para respuesta de lista de citas'
+  z.array(AppointmentResponseSchema).openapi({ description: 'Esquema para respuesta de lista de citas' })
 );
 
 /**
  * Esquema para respuestas de error
  * Define la estructura de los mensajes de error devueltos por la API
  */
-const ErrorResponseSchema = registerSchema(
+const ErrorResponseSchema = registry.register(
+  'ErrorResponse',
   z.object({
     message: z.string(),
-  }),
-  'ErrorResponse',
-  'Esquema para respuesta de error'
+  }).openapi({ description: 'Esquema para respuesta de error' })
 );
 
 /**
@@ -108,7 +112,23 @@ registry.registerPath({
         },
       },
     },
-  },
+    400: {
+      description: 'Datos inválidos',
+      content: {
+        'application/json': {
+          schema: ErrorResponseSchema,
+        },
+      },
+    },
+    500: {
+      description: 'Error interno del servidor',
+      content: {
+        'application/json': {
+          schema: ErrorResponseSchema,
+        },
+      },
+    },
+  }
 });
 
 /**
@@ -134,8 +154,23 @@ registry.registerPath({
           schema: AppointmentListResponseSchema,
         },
       },
+    }, 400: {
+      description: 'Datos inválidos',
+      content: {
+        'application/json': {
+          schema: ErrorResponseSchema,
+        },
+      },
     },
-  },
+    500: {
+      description: 'Error interno del servidor',
+      content: {
+        'application/json': {
+          schema: ErrorResponseSchema,
+        },
+      },
+    },
+  }
 });
 
 /**

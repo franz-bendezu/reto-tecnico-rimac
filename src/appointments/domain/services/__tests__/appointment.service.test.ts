@@ -3,6 +3,7 @@ import { IAppointmentRepository } from "../../../infraestructure/repositories/ap
 import { IAppointmentCountryProducer } from "../../../infraestructure/messasing/appointment-country.producer.interface";
 import { IAppointmentCreate } from "../../../../common/domain/interfaces/appointment-create";
 import { AppointmentStatusType } from "../../../../common/domain/models/appointment-status";
+import { IBaseAppointment } from "../../../../common/domain/interfaces/appointment";
 
 describe("AppointmentService", () => {
     let appointmentService: AppointmentService;
@@ -82,7 +83,7 @@ describe("AppointmentService", () => {
 
     it("should get appointments by insured id", async () => {
         const insuredId = "123";
-        const appointments = [
+        const appointments: IBaseAppointment[] = [
             {
                 insuredId,
                 scheduleId: 1,
@@ -120,7 +121,7 @@ describe("AppointmentService", () => {
             ],
             createdAt: "",
             updatedAt: "",
-            countryISO: "",
+            countryISO: "PE",
         });
 
         await appointmentService.completeAppointment(insuredId, scheduleId);
@@ -172,7 +173,7 @@ describe("AppointmentService", () => {
             ],
             createdAt: "",
             updatedAt: "",
-            countryISO: "",
+            countryISO: "PE",
         });
 
         mockAppointmentRepository.updateAppointment.mockRejectedValue(
